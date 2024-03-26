@@ -180,21 +180,45 @@ class SalahTimesUtil {
     return formattedTimeRemaining;
   }
 
+  // static DateTime convert12hrTo24hr(
+  //     {required String time12hr, bool nextDay = false}) {
+  //   DateFormat format12hr =
+  //       DateFormat.jm(); // Format for parsing 12-hour time strings
+  //   //
+  //   DateFormat format24hr =
+  //       DateFormat.Hms(); // Format for outputting 24-hour time strings
+  //   //
+  //   DateTime dateTime = format12hr.parse(time12hr.trim());
+  //   if (nextDay) {
+  //     return DateTime.parse(DateFormat("yyyy-MM-dd")
+  //             .format(DateTime.now().add(const Duration(days: 1))) +
+  //         format24hr.format(dateTime));
+  //   }
+  //   return DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.now()) +
+  //       format24hr.format(dateTime));
+  // }
+
   static DateTime convert12hrTo24hr(
       {required String time12hr, bool nextDay = false}) {
-    DateFormat format12hr =
-        DateFormat.jm(); // Format for parsing 12-hour time strings
-    DateFormat format24hr =
-        DateFormat.Hms(); // Format for outputting 24-hour time strings
-    DateTime dateTime = format12hr.parse(time12hr);
-    if (nextDay) {
-      return DateTime.parse(DateFormat("yyyy-MM-dd ")
-              .format(DateTime.now().add(const Duration(days: 1))) +
-          format24hr.format(dateTime));
-    }
-    return DateTime.parse(DateFormat("yyyy-MM-dd ").format(DateTime.now()) +
-        format24hr.format(dateTime));
+
+
+      DateFormat format12hr = DateFormat
+          ("h:m a"); // Format for parsing 12-hour time strings
+
+
+      DateTime dateTime = format12hr.parse(
+          time12hr.trim()); // Parse the 12-hour time string to a DateTime object
+
+      // print("incoming 12hrs =${time12hr}= parsed =${dateTime}=======");
+      DateTime now = DateTime.now();
+      DateTime date = nextDay ? now.add(const Duration(days: 1)) : now;
+
+      return DateTime(
+          date.year, date.month, date.day, dateTime.hour, dateTime.minute,
+          dateTime.second);
+
   }
+
 
   static int dateTimeToTimestamp() {
     // Get the milliseconds since epoch and convert to seconds

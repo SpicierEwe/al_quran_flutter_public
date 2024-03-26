@@ -25,6 +25,11 @@ class _SalahTimesDisplayScreenState extends State<SalahTimesDisplayScreen> {
 
     if (!context.read<PermissionsBloc>().state.isLocationPermissionGranted) {
       context.read<PermissionsBloc>().add(GetLocationPermission());
+
+      if( context.read<PermissionsBloc>().state.isLocationPermissionGranted){
+        context.read<SalahBloc>().add(GetSalahTimesEvent());
+
+      }
     }
     if (context.read<PermissionsBloc>().state.isLocationPermissionGranted) {
       context.read<SalahBloc>().add(GetSalahTimesEvent());

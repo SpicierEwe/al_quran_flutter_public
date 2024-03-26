@@ -47,6 +47,8 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final Color bgColor  = Theme.of(context).scaffoldBackgroundColor;
+    final Color selectedColor  =  AppVariables.companyColor.withOpacity(.35);
     const double iconSize = 29;
     const double smallIconSize = 21;
 
@@ -195,16 +197,16 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                             child: Container(
                                 margin: EdgeInsets.only(bottom: 55, left: 1.w),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 1,
-                                      blurRadius: 5,
-                                      offset: const Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
+                                  color: bgColor,
+                                  // boxShadow: [
+                                  //   BoxShadow(
+                                  //     color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                  //     spreadRadius: 1,
+                                  //     blurRadius: 5,
+                                  //     offset: const Offset(
+                                  //         0, 3), // changes position of shadow
+                                  //   ),
+                                  // ],
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 height: 40.h,
@@ -307,7 +309,7 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                         Expanded(
                                           child: Column(
                                             children: [
-                                              const Text('Reciters'),
+                                              // const Text('Reciters'),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -328,6 +330,7 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                             ],
                                           ),
                                         ),
+
 
                                       if (selectedAudioSubSettings ==
                                           AudioSettingsOptions.reciter)
@@ -356,15 +359,15 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                    backgroundColor:
-                                                        MaterialStateProperty.all<
-                                                                Color>(
-                                                            selectedAudioSubSettings ==
-                                                                    AudioSettingsOptions
-                                                                        .reciter
-                                                                ? Colors.white
-                                                                : Colors
-                                                                    .amberAccent),
+                                                    // backgroundColor:
+                                                    //     MaterialStateProperty.all<
+                                                    //             Color>(
+                                                    //         selectedAudioSubSettings ==
+                                                    //                 AudioSettingsOptions
+                                                    //                     .reciter
+                                                    //             ? Colors.white
+                                                    //             : Colors
+                                                    //                 .amberAccent),
                                                   ),
                                                   onPressed: () {
                                                     // _closeAudioSettingsOverlayBox();
@@ -389,9 +392,8 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                                                 .allRecitersList[
                                                                     index]["id"]
                                                                 .toString()
-                                                        ? Colors.grey
-                                                            .withOpacity(.2)
-                                                        : Colors.white,
+                                                        ? selectedColor
+                                                        :bgColor ,
 
                                                     leading: CircleAvatar(
                                                       radius: 20,
@@ -524,9 +526,8 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                                                 .translations[
                                                                     index]["id"]
                                                                 .toString()
-                                                        ? Colors.grey
-                                                            .withOpacity(.2)
-                                                        : Colors.white,
+                                                        ? selectedColor
+                                                        : bgColor,
                                                     leading: CircleAvatar(
                                                         radius: 20,
                                                         backgroundImage: AssetImage(

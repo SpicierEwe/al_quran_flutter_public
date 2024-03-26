@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:al_quran_new/core/constants/custom_themes.dart';
 import 'package:al_quran_new/logic/language_bloc/language_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -26,12 +29,26 @@ class TranslationSettingsSectionWidget extends StatefulWidget {
 
 class _TranslationSettingsSectionWidgetState
     extends State<TranslationSettingsSectionWidget> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     SettingsState settingsState = widget.settingsState;
     String translationName = (settingsState.translationIds?.firstWhere(
         (element) => element["id"] == settingsState.selectedTranslationId,
         orElse: () => {"name": "Loading.."})["name"]);
+
+    String displayText() {
+
+     return LocalDataRepository.getStoredQuranChapterTranslation(
+        chapterId: 1,
+        translationId: settingsState.selectedTranslationId,
+      )!
+          .first["text"];
+    }
+
 
     return Column(
       children: [
@@ -75,11 +92,15 @@ class _TranslationSettingsSectionWidgetState
         fontSizeChangerWidget(
           context: context,
           settingsState: settingsState,
-          displayText: LocalDataRepository.getStoredQuranChapterTranslation(
-            chapterId: 1,
-            translationId: settingsState.selectedTranslationId,
-          )!
-              .first["text"],
+          displayText: displayText(),
+
+
+
+          // LocalDataRepository.getStoredQuranChapterTranslation(
+          //   chapterId: 1,
+          //   translationId: settingsState.selectedTranslationId,
+          // )!
+          //     .first["text"],
           fontDecreaseOnPressed: () {
             context
                 .read<SettingsBloc>()

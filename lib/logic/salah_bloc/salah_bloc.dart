@@ -19,6 +19,7 @@ part 'salah_state.dart';
 
 class SalahBloc extends HydratedBloc<SalahEvent, SalahState> {
   final PermissionsBloc permissionBloc;
+  late Timer _timer;
 
   SalahBloc({required this.permissionBloc}) : super(const SalahState()) {
     on<GetSalahTimesEvent>((event, emit) async {
@@ -70,14 +71,14 @@ class SalahBloc extends HydratedBloc<SalahEvent, SalahState> {
         add(GetQiblaDirectionEvent());
       }
     });
-    late Timer timer;
+
     on<CalculateCurrentSalahEvent>((event, emit) async {
       Completer<void> completer = Completer<void>();
 
       // Start the timer when the calculation is triggered
       void startTimer() async {
         // Schedule the timer to run every second
-        timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
           // Perform the Salah time calculation
           Map<String, Map<String, dynamic>> calculatedTimes =
               SalahTimesUtil.liveCalculation(salahTimes: state.salahTimes!);
@@ -124,7 +125,7 @@ class SalahBloc extends HydratedBloc<SalahEvent, SalahState> {
 
     // cancel the timer
     on<CancelTimerEvent>((event, emit) async {
-      timer.cancel();
+      _timer.cancel();
     });
   }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
@@ -92,7 +93,8 @@ class LocalDataRepository {
   /// [chapterId]: The identifier for the Quran chapter.
   /// Returns a list of Quran Arabic chapter data, or null if not found.
   static List? getStoredQuranChapterTranslation(
-      {required int translationId, required int chapterId}) {
+      {required int translationId, required int chapterId }) {
+
     final data = box.get("${translationId}_$chapterId");
     // Logger().i(data + "${translationId}_$chapterId");
     Logger().i("${translationId}_$chapterId");
@@ -100,6 +102,7 @@ class LocalDataRepository {
       return jsonDecode(data);
     } else {
       return null;
+
     }
   }
 

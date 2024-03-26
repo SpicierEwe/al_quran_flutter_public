@@ -160,14 +160,24 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
         // if the preselected id does not exist in the downloaded translation ids
         if (doesPreSelectedIdExists == false) {
           Logger().i("iD NOT FOUND");
-          // change the selected translation id to the 1st translation id
-          settingsBloc.add(SettingsEventChangeTranslation(
-              translationId: translationIds[0]["id"] as int));
+
           // download the translation
           await _downloadFullQuranTranslation(
             emit: emit,
             translationId: translationIds[0]["id"].toString(),
           );
+
+          /*
+          it is important to change the ids only after they are downloaded
+          cause if we change the ids before they are downloaded then the downloaded
+          it will give a null error as it translation has not been downloaded yet and cant
+          be found
+
+          */
+
+          // change the selected translation id to the 1st translation id
+          settingsBloc.add(SettingsEventChangeTranslation(
+              translationId: translationIds[0]["id"] as int));
         }
         // else do nothing
         else {
@@ -269,6 +279,9 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
           message: message,
           areTranslationIdsDownloaded: true,
         ));
+
+        /// fetches all the translation ids and refreshes the [state.translationIds] with
+        /// the new translation ids of the newly selected language
         settingsBloc.add(SettingsEventGetAllTranslationIds(
             languageName:
                 languageBloc.state.selectedLanguage["name"].toString()));

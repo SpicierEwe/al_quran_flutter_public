@@ -148,12 +148,6 @@ class _SurahDisplayScreenState extends State<JuzDisplayScreen>
           ],
           title:
 
-              // BlocBuilder<SurahDisplayBloc, SurahDisplayState>(
-              //   builder: (context, state) {
-              //     return Text("sdsd");
-              //   },
-              // ),
-
               BlocBuilder<SurahTrackerBloc, SurahTrackerState>(
             builder: (context, state) {
               return Text(
@@ -211,7 +205,7 @@ class _SurahDisplayScreenState extends State<JuzDisplayScreen>
                           state.juzTranslationData == null) {
                         return const LoadingWidget();
 
-                        //   todo : implement using tabcontroller
+
                       }
                       final Map<String, String> juzMetaData =
                           AppVariables.juzMetaData[juzId - 1]["verse_mapping"];
