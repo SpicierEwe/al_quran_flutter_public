@@ -27,9 +27,11 @@ class QuranDataApis {
   ///
   /// The [chapterId] parameter specifies the ID of the chapter to be fetched.
   static String getArabicChapterApi({required String chapterId}) {
-    // return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=qpc_uthmani_hafs,text_qpc_nastaleeq,,code_v2&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq%2Cindopak_nastaleeq&per_page=all";
 
-    return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq%2Ccode_v2&per_page=all";
+    // use V2 code when you use Ayman Tajweed font
+    // return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq%2Ccode_v2&per_page=all";
+    //
+    return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq&per_page=all";
   }
 
   /// URL for fetching a single translation of a specific chapter.

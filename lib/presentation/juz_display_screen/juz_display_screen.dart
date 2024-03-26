@@ -192,84 +192,87 @@ class _SurahDisplayScreenState extends State<JuzDisplayScreen>
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [
-            for (int juzId = AppVariables.juzMetaData.length;
-                juzId > 0;
-                juzId--)
-              BlocBuilder<SettingsBloc, SettingsState>(
-                builder: (context, settingsState) {
-                  return BlocBuilder<JuzDisplayBloc, JuzDisplayState>(
-                    builder: (context, state) {
-                      // If the surah data or the translation data is not available, then fetch the data.
-                      if (state.juzData == null ||
-                          state.juzTranslationData == null) {
-                        return const LoadingWidget();
+          children: List.generate(AppVariables.juzMetaData.length, (index) =>
 
+              _buildJuzPage(AppVariables.juzMetaData.length-index, themeBloc),
 
-                      }
-                      final Map<String, String> juzMetaData =
-                          AppVariables.juzMetaData[juzId - 1]["verse_mapping"];
-
-                      final List juzData = [];
-                      final List juzTranslatedData = [];
-                      juzMetaData.forEach((key, value) {
-                        int keyInt = int.parse(key);
-                        int verseStart = int.parse(value.split("-")[0]);
-                        int verseEnd = int.parse(value.split("-")[1]);
-                        String keyValue = value;
-                        print("key : $key, value : $value");
-
-                        final List surahDataTemp =
-                            LocalDataRepository.getStoredQuranArabicChapter(
-                          chapterId: keyInt,
-                        )!;
-
-                        final List translatedDataTemp = LocalDataRepository
-                            .getStoredQuranChapterTranslation(
-                          chapterId: keyInt,
-                          translationId: settingsState.selectedTranslationId,
-                        )!;
-
-                        juzData.addAll(
-                            surahDataTemp.sublist(verseStart - 1, verseEnd));
-                        juzTranslatedData.addAll(translatedDataTemp.sublist(
-                            verseStart - 1, verseEnd));
-                      });
-
-                      List pages =
-                          juzData.map((e) => e["page_number"]).toSet().toList();
-
-                      // Logger().i("pages  : " + pages.toString());
-
-                      // Build a ListView displaying the Surah verses.
-                      return BlocBuilder<DisplayTypeSwitcherBloc,
-                          DisplayTypeSwitcherState>(
-                        builder: (context, state) {
-                          if (state.isMushafMode) {
-                            return JuzMushafModeWidget(
-                              juzData: juzData,
-                              pages: pages,
-                              juzId: juzId,
-                              themeBloc: themeBloc,
-                              player: player,
-                            );
-                          }
-
-                          return JuzVerseByVerseMode(
-                              juzData: juzData,
-                              juzId: juzId,
-                              themeBloc: themeBloc,
-                              player: player,
-                              translatedData: juzTranslatedData);
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-          ],
         ),
       ),
+      ),
     );
+  }
+
+  BlocBuilder<SettingsBloc, SettingsState> _buildJuzPage(int juzId, ThemeBloc themeBloc) {
+    return BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, settingsState) {
+                return BlocBuilder<JuzDisplayBloc, JuzDisplayState>(
+                  builder: (context, state) {
+                    // If the surah data or the translation data is not available, then fetch the data.
+                    if (state.juzData == null ||
+                        state.juzTranslationData == null) {
+                      return const LoadingWidget();
+
+
+                    }
+                    final Map<String, String> juzMetaData =
+                        AppVariables.juzMetaData[juzId - 1]["verse_mapping"];
+
+                    final List juzData = [];
+                    final List juzTranslatedData = [];
+                    juzMetaData.forEach((key, value) {
+                      int keyInt = int.parse(key);
+                      int verseStart = int.parse(value.split("-")[0]);
+                      int verseEnd = int.parse(value.split("-")[1]);
+                      String keyValue = value;
+                      print("key : $key, value : $value");
+
+                      final List surahDataTemp =
+                          LocalDataRepository.getStoredQuranArabicChapter(
+                        chapterId: keyInt,
+                      )!;
+
+                      final List translatedDataTemp = LocalDataRepository
+                          .getStoredQuranChapterTranslation(
+                        chapterId: keyInt,
+                        translationId: settingsState.selectedTranslationId,
+                      )!;
+
+                      juzData.addAll(
+                          surahDataTemp.sublist(verseStart - 1, verseEnd));
+                      juzTranslatedData.addAll(translatedDataTemp.sublist(
+                          verseStart - 1, verseEnd));
+                    });
+
+                    List pages =
+                        juzData.map((e) => e["page_number"]).toSet().toList();
+
+                    // Logger().i("pages  : " + pages.toString());
+
+                    // Build a ListView displaying the Surah verses.
+                    return BlocBuilder<DisplayTypeSwitcherBloc,
+                        DisplayTypeSwitcherState>(
+                      builder: (context, state) {
+                        if (state.isMushafMode) {
+                          return JuzMushafModeWidget(
+                            juzData: juzData,
+                            pages: pages,
+                            juzId: juzId,
+                            themeBloc: themeBloc,
+                            player: player,
+                          );
+                        }
+
+                        return JuzVerseByVerseMode(
+                            juzData: juzData,
+                            juzId: juzId,
+                            themeBloc: themeBloc,
+                            player: player,
+                            translatedData: juzTranslatedData);
+                      },
+                    );
+                  },
+                );
+              },
+            );
   }
 }

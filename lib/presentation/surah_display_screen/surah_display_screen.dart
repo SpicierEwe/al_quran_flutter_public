@@ -170,65 +170,72 @@ class _SurahDisplayScreenState extends State<SurahDisplayScreen>
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [
-            for (int surahId = 114; surahId > 0; surahId--)
-              BlocBuilder<SettingsBloc, SettingsState>(
-                builder: (context, settingsState) {
-                  return BlocBuilder<SurahDisplayBloc, SurahDisplayState>(
-                    builder: (context, state) {
-                      // If the surah data or the translation data is not available, then fetch the data.
-                      if (state.surahData == null ||
-                          state.chapterTranslationData == null) {
-                        return const LoadingWidget();
-                      }
+          children: List.generate(
+            114,
+            // for (int surahId = 114; surahId > 0; surahId--)
+          (index) =>     _buildSurahPage(114-index, themeBloc),
 
-                      final List surahData =
-                          LocalDataRepository.getStoredQuranArabicChapter(
-                        chapterId: surahId,
-                      )!;
 
-                      final List translatedData =
-                          LocalDataRepository.getStoredQuranChapterTranslation(
-                        chapterId: surahId,
-                        translationId: settingsState.selectedTranslationId,
-                      )!;
-
-                      List pages = surahData
-                          .map((e) => e["page_number"])
-                          .toSet()
-                          .toList();
-
-                      // Logger().i("pages  : " + pages.toString());
-
-                      // Build a ListView displaying the Surah verses.
-                      return BlocBuilder<DisplayTypeSwitcherBloc,
-                          DisplayTypeSwitcherState>(
-                        builder: (context, state) {
-                          if (state.isMushafMode) {
-                            return SurahMushafModeWidget(
-                              surahData: surahData,
-                              pages: pages,
-                              surahId: surahId,
-                              themeBloc: themeBloc,
-                              player: player,
-                            );
-                          }
-
-                          return SurahVerseByVerseMode(
-                              surahData: surahData,
-                              surahId: surahId,
-                              themeBloc: themeBloc,
-                              player: player,
-                              translatedData: translatedData);
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-          ],
-        ),
       ),
+    ),
+    )
     );
+  }
+
+  BlocBuilder<SettingsBloc, SettingsState> _buildSurahPage(int surahId, ThemeBloc themeBloc) {
+    return BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, settingsState) {
+                return BlocBuilder<SurahDisplayBloc, SurahDisplayState>(
+                  builder: (context, state) {
+                    // If the surah data or the translation data is not available, then fetch the data.
+                    if (state.surahData == null ||
+                        state.chapterTranslationData == null) {
+                      return const LoadingWidget();
+                    }
+
+                    final List surahData =
+                        LocalDataRepository.getStoredQuranArabicChapter(
+                      chapterId: surahId,
+                    )!;
+
+                    final List translatedData =
+                        LocalDataRepository.getStoredQuranChapterTranslation(
+                      chapterId: surahId,
+                      translationId: settingsState.selectedTranslationId,
+                    )!;
+
+                    List pages = surahData
+                        .map((e) => e["page_number"])
+                        .toSet()
+                        .toList();
+
+                    // Logger().i("pages  : " + pages.toString());
+
+                    // Build a ListView displaying the Surah verses.
+                    return BlocBuilder<DisplayTypeSwitcherBloc,
+                        DisplayTypeSwitcherState>(
+                      builder: (context, state) {
+                        if (state.isMushafMode) {
+                          return SurahMushafModeWidget(
+                            surahData: surahData,
+                            pages: pages,
+                            surahId: surahId,
+                            themeBloc: themeBloc,
+                            player: player,
+                          );
+                        }
+
+                        return SurahVerseByVerseMode(
+                            surahData: surahData,
+                            surahId: surahId,
+                            themeBloc: themeBloc,
+                            player: player,
+                            translatedData: translatedData);
+                      },
+                    );
+                  },
+                );
+              },
+            );
   }
 }

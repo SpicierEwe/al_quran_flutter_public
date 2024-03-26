@@ -243,7 +243,7 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
       onProgress: (currentChapter, totalChapters, progressPercentage) {
         emit(state.copyWith(
           message:
-              "Downloading chapter $currentChapter of $totalChapters $progressPercentage",
+              "Downloading chapter $currentChapter of $totalChapters | $progressPercentage",
           progressPercentage: progressPercentage,
         ));
       },
@@ -390,7 +390,7 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
     } else {
       // Emit success state
       emit(state.copyWith(
-        lastFetchedDate: DateFormat("d MMM yyyy h:m aa").format(DateTime.now()),
+        lastFetchedDate: DateFormat("d MMM yyyy h:mm aa").format(DateTime.now()),
         message: "Download completed",
         isSnackbarVisible: false,
         isDownloading: false,

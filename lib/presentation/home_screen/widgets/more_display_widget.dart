@@ -34,7 +34,7 @@ class _MoreDisplayWidgetState extends State<MoreDisplayWidget> {
                         onPressed: () {
                           context.push('/allah_names_display_screen');
                         }),
-                    Utils.customSpacer(),
+                    Utils.customSpacer(height: 1.5),
                     // long
                     longContainer(
                         title: "DUA'S",
@@ -46,7 +46,7 @@ class _MoreDisplayWidgetState extends State<MoreDisplayWidget> {
                   ],
                 ),
                 SizedBox(
-                  width: 3.5.w,
+                  width: 3.w,
                 ),
                 // col 2
                 Column(
@@ -58,7 +58,7 @@ class _MoreDisplayWidgetState extends State<MoreDisplayWidget> {
                         onPressed: () {
                           context.push('/salah_times_display_screen');
                         }),
-                    Utils.customSpacer(),
+                    Utils.customSpacer(height: 1.5),
 
                     // medium
                     mediumContainer(

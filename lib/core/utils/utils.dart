@@ -5,6 +5,7 @@ import 'package:al_quran_new/core/constants/custom_themes.dart';
 import 'package:al_quran_new/core/constants/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:sizer/sizer.dart';
@@ -586,6 +587,9 @@ class Utils {
                         : TextDirection.rtl,
                     fontWeight: FontWeight.w400,
                     fontSize: FontSize(settingsState.translationFontSize.sp),
+                    fontFamily: Utils.translationFonts(context: context),
+                    lineHeight: LineHeight.number(
+                        Utils.translationFontsLineHeights(context: context)),
                   ),
                 },
               )
@@ -594,5 +598,41 @@ class Utils {
         ),
       ],
     );
+  }
+
+  // this function manages the translation font
+  /*
+  *
+  * By default it gives the translation font as a String.
+  *
+  * if Line height is required then pass isLineHeight as true and it will return the line height value
+  * as a double.
+  *
+  * */
+  static dynamic translationFonts({required BuildContext context}) {
+    if (context
+            .read<LanguageBloc>()
+            .state
+            .selectedLanguage["name"]
+            .toString()
+            .toLowerCase() ==
+        "urdu") {
+      return "urdu_font";
+    }
+
+    return null;
+  }
+
+  static double translationFontsLineHeights({required BuildContext context}) {
+    if (context
+            .read<LanguageBloc>()
+            .state
+            .selectedLanguage["name"]
+            .toString()
+            .toLowerCase() ==
+        "urdu") {
+      return 1.8;
+    }
+    return 1.17;
   }
 }

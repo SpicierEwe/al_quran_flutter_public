@@ -19,6 +19,7 @@ import 'package:al_quran_new/logic/theme_bloc/theme_bloc.dart';
 import 'package:al_quran_new/presentation/router/app_router.dart';
 import 'package:al_quran_new/presentation/widgets/audio_bottom_bar.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,52 +136,93 @@ class MyApp extends StatelessWidget {
                       body: AudioBottomBarWidget(
                         child: child!,
                       ),
-                      // floatingActionButton: FloatingActionButton(
-                      //   onPressed: () {
-                      //     context.read<ThemeBloc>().add(ThemeChangedEvent(
-                      //         themeType: themeState.selectedThemeType ==
-                      //                 ThemeType.light
-                      //             ? ThemeType.dark
-                      //             : ThemeType.light));
-                      //   },
-                      //   backgroundColor: Colors.green,
-                      //   child: Row(
-                      //     children: [
-                      //       Text(themeState.selectedThemeType
-                      //           .toString()
-                      //           .split(".")[1]),
-                      //       const Icon(Icons.dark_mode),
-                      //     ],
-                      //   ),
-                      // ),
+
+                      // Download progress display bottom bar
                       bottomNavigationBar:
                           BlocBuilder<DownloaderBloc, DownloaderState>(
                         builder: (context, downloaderState) {
+                          bool isError = downloaderState.isError;
                           return Visibility(
                               visible: downloaderState.isSnackbarVisible,
+
                               child: BottomAppBar(
                                 height: 7.h,
                                 padding: EdgeInsets.zero,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: Text(downloaderState.message),
-                                    ),
-                                    if (downloaderState.isError)
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          context
-                                              .read<DownloaderBloc>()
-                                              .add(RetryDownloadEvent());
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red),
-                                        child: const Text("Retry"),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 3.w,
+                                    vertical: 1.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    // color: Colors.green,
+                                    border: Border(
+                                      top: BorderSide(
+                                        color:
+                                            isError ? Colors.red : Colors.green,
+                                        width: 1.w,
                                       ),
-                                  ],
+                                    ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      if (!isError)
+                                        const SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              CircularProgressIndicator(
+                                                backgroundColor: Colors.white,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        Colors.teal),
+                                              ),
+                                              Icon(Icons.download,
+                                                  color: Colors.teal, size: 15)
+                                            ],
+                                          ),
+                                        )
+                                      // If error show this icon
+                                      else
+                                        const SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: Icon(
+                                            Icons.error,
+                                            color: Colors.red,
+                                            size: 30,
+                                          ),
+                                        ),
+
+                                      // Progress Text ==========================
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(downloaderState.message),
+                                        ),
+                                      ),
+
+                                      // Error Button ==========================
+                                      if (isError)
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            context
+                                                .read<DownloaderBloc>()
+                                                .add(RetryDownloadEvent());
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                          ),
+                                          child: const Text(
+                                            "Retry",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ));
                         },

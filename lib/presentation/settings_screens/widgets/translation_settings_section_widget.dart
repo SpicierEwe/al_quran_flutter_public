@@ -228,6 +228,7 @@ class _TranslationSettingsSectionWidgetState
                 textAlign: TextAlign.center,
                 fontWeight: FontWeight.w400,
                 fontSize: FontSize(settingsState.translationFontSize.sp),
+                fontFamily: Utils.translationFonts(context: context ),
               ),
             },
             // overflow:

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:al_quran_new/logic/permissions_bloc/permissions_bloc.dart';
 import 'package:al_quran_new/presentation/more_section/salah_times_display_screen/widgets/qibla_compass.dart';
 import 'package:al_quran_new/presentation/more_section/salah_times_display_screen/widgets/salah_times_display_widget.dart';
@@ -19,22 +21,33 @@ class _SalahTimesDisplayScreenState extends State<SalahTimesDisplayScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   int _selectedIndex = 0;
 
+  late StreamSubscription<PermissionsState> permissionSubscription;
   @override
   void initState() {
     super.initState();
 
-    if (!context.read<PermissionsBloc>().state.isLocationPermissionGranted) {
-      context.read<PermissionsBloc>().add(GetLocationPermission());
+    final permissionsBloc = context.read<PermissionsBloc>();
 
-      if( context.read<PermissionsBloc>().state.isLocationPermissionGranted){
-        context.read<SalahBloc>().add(GetSalahTimesEvent());
-
-      }
-    }
-    if (context.read<PermissionsBloc>().state.isLocationPermissionGranted) {
+    // Check if location permission is granted
+    if (!permissionsBloc.state.isLocationPermissionGranted) {
+      // Request location permission
+      permissionsBloc.add(GetLocationPermission());
+    } else {
+      // Location permission is already granted, fetch Salah times
       context.read<SalahBloc>().add(GetSalahTimesEvent());
     }
+
+    // Listen for changes in location permission state
+     permissionSubscription = permissionsBloc.stream.listen((state) {
+      if (state.isLocationPermissionGranted) {
+        // If location permission is granted, fetch Salah times
+        context.read<SalahBloc>().add(GetSalahTimesEvent());
+        // Cancel the subscription after the event
+        permissionSubscription.cancel();
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {

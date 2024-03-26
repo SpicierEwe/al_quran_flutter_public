@@ -55,8 +55,9 @@ dependencies:
   location: ^5.0.3
   app_settings: ^5.1.1
   geocoding: ^3.0.0
-  intl: ^0.19.0
+  intl: 0.18.1
   flutter_compass: ^0.8.0
+  flutter_animated_icons: ^1.0.1
 
 
 dev_dependencies:
@@ -113,22 +114,35 @@ flutter:
 
     # Quran Fonts -----------
 
-    #    Indo pak Font
+    # Indo pak Font
     - family: indoPak_font
       fonts:
         - asset: assets/fonts/quran_fonts/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.ttf
           style: italic
 
-    #     Uthmani Font
+    # Uthmani Font
     - family: uthmani_font
       fonts:
         - asset: assets/fonts/quran_fonts/UthmanicHafs_V20.ttf
           style: italic
 
+    # bismillah font
     - family: bismillah_font
       fonts:
         - asset: assets/fonts/bismillah_font.ttf
           style: italic
+
+    # urdu translation font
+    - family: urdu_font
+      fonts:
+        - asset: assets/fonts/translation_fonts/urdu_font/NotoNastaliqUrdu-Regular.ttf
+          style: italic
+
+
+
+
+
+
 
 
     # Allah and Rasool Names Fonts ---------
