@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:al_quran_new/logic/display_type_switcher_bloc/display_type_switcher_bloc.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -66,11 +67,14 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
       final firstIndex = positions.isNotEmpty ? positions.first.index : null;
 
       if (firstIndex != null) {
-        context
-            .read<SurahTrackerBloc>()
-            .add(JuzDisplayUpdatePageHizbManzilMushafModeEvent(
-              scrollPositionIndex: firstIndex,
-            ));
+        EasyDebounce.debounce(
+            'juz_mushaf_mode_debouncer',
+            const Duration(milliseconds: 500),
+            () => context
+                .read<SurahTrackerBloc>()
+                .add(JuzDisplayUpdatePageHizbManzilMushafModeEvent(
+                  scrollPositionIndex: firstIndex,
+                )));
 
         // Logger().i("firstIndex  : " + firstIndex.toString());
       }

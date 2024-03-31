@@ -13,11 +13,13 @@ import 'package:al_quran_new/logic/permissions_bloc/permissions_bloc.dart';
 import 'package:al_quran_new/logic/salah_bloc/salah_bloc.dart';
 import 'package:al_quran_new/logic/settings_bloc/settings_bloc.dart';
 import 'package:al_quran_new/logic/surah_display_bloc/surah_display_bloc.dart';
+import 'package:al_quran_new/logic/surah_info_bloc/surah_info_bloc.dart';
 import 'package:al_quran_new/logic/surah_names_bloc/surah_names_bloc.dart';
 import 'package:al_quran_new/logic/surah_tracker_bloc/surah_tracker_bloc.dart';
 import 'package:al_quran_new/logic/theme_bloc/theme_bloc.dart';
 import 'package:al_quran_new/presentation/router/app_router.dart';
 import 'package:al_quran_new/presentation/widgets/audio_bottom_bar.dart';
+import 'package:al_quran_new/presentation/widgets/bottom_donwnload_bar_widget.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -126,6 +128,11 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               SalahBloc(permissionBloc: context.read<PermissionsBloc>()),
         ),
+        BlocProvider<SurahInfoBloc>(
+          create: (context) => SurahInfoBloc(
+            languageBloc: context.read<LanguageBloc>(),
+          ),
+        ),
       ],
       child: Sizer(
           builder: (context, orientation, deviceType) =>
@@ -138,95 +145,7 @@ class MyApp extends StatelessWidget {
                       ),
 
                       // Download progress display bottom bar
-                      bottomNavigationBar:
-                          BlocBuilder<DownloaderBloc, DownloaderState>(
-                        builder: (context, downloaderState) {
-                          bool isError = downloaderState.isError;
-                          return Visibility(
-                              visible: downloaderState.isSnackbarVisible,
-
-                              child: BottomAppBar(
-                                height: 7.h,
-                                padding: EdgeInsets.zero,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 3.w,
-                                    vertical: 1.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    // color: Colors.green,
-                                    border: Border(
-                                      top: BorderSide(
-                                        color:
-                                            isError ? Colors.red : Colors.green,
-                                        width: 1.w,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      if (!isError)
-                                        const SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              CircularProgressIndicator(
-                                                backgroundColor: Colors.white,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation(
-                                                        Colors.teal),
-                                              ),
-                                              Icon(Icons.download,
-                                                  color: Colors.teal, size: 15)
-                                            ],
-                                          ),
-                                        )
-                                      // If error show this icon
-                                      else
-                                        const SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: Icon(
-                                            Icons.error,
-                                            color: Colors.red,
-                                            size: 30,
-                                          ),
-                                        ),
-
-                                      // Progress Text ==========================
-                                      Expanded(
-                                        child: Center(
-                                          child: Text(downloaderState.message),
-                                        ),
-                                      ),
-
-                                      // Error Button ==========================
-                                      if (isError)
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            context
-                                                .read<DownloaderBloc>()
-                                                .add(RetryDownloadEvent());
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
-                                          ),
-                                          child: const Text(
-                                            "Retry",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ));
-                        },
-                      ),
+                      bottomNavigationBar: const BottomDownloadBarWidget(),
                     ),
                     routerConfig: AppRouter.router,
                     title: AppStrings.appName,

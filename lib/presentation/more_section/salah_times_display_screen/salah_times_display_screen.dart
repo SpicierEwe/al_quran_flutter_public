@@ -22,9 +22,11 @@ class _SalahTimesDisplayScreenState extends State<SalahTimesDisplayScreen> {
   int _selectedIndex = 0;
 
   late StreamSubscription<PermissionsState> permissionSubscription;
+  late SalahBloc _salahBloc;
   @override
   void initState() {
     super.initState();
+    _salahBloc = context.read<SalahBloc>();
 
     final permissionsBloc = context.read<PermissionsBloc>();
 
@@ -46,6 +48,15 @@ class _SalahTimesDisplayScreenState extends State<SalahTimesDisplayScreen> {
         permissionSubscription.cancel();
       }
     });
+  }
+
+  @override
+  void dispose() {
+
+    super.dispose();
+
+    // Cancel the Timer
+    _salahBloc.add(CancelTimerEvent());
   }
 
 

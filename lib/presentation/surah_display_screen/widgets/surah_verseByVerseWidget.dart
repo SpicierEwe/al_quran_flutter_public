@@ -78,7 +78,8 @@ class _SurahVerseByVerseModeState extends State<SurahVerseByVerseMode> {
 
       if (firstIndex != null) {
         EasyDebounce.debounce(
-            'my-debouncer', // <-- An ID for this particular debounce
+            'surah_verse_by_verse_debouncer',
+            // <-- An ID for this particular debounce
             const Duration(milliseconds: 200), // <-- The debounce duration
             () {
           context.read<SurahTrackerBloc>().add(
@@ -407,35 +408,35 @@ class _SurahVerseByVerseModeState extends State<SurahVerseByVerseMode> {
     );
   }
 
-  Widget displayWordText(
-      int verseIndex,
-      int wordIndex,
-      SettingsState settingsState,
-      AudioPlayerState audioPlayerState,
-      SurahTrackerState surahTrackerState,
-      BuildContext context) {
-    return Text(
-      widget.surahData[verseIndex]["words"][wordIndex][Utils.quranScriptName(
-              quranScriptName: settingsState.selectedQuranScriptType)]
-          .toString(),
-      style: TextStyle(
-        locale: const Locale("ar"),
-        fontFamily: "${settingsState.selectedQuranScriptType}_font",
-        fontSize: settingsState.quranTextFontSize.sp,
-        height: 1.55,
-        color: Utils.highlightTextWords(
-          audioPlayerHighlightedWordLocation:
-              audioPlayerState.highlightWordLocation,
-          surahTrackerHighlightedWordLocation: surahTrackerState.highlightWord,
-          quranDisplayType: QuranDisplayType.surah,
-          audioPlayerQuranDisplayType: audioPlayerState.quranDisplayType,
-          currentWordLocation: widget.surahData[verseIndex]["words"][wordIndex]
-              ["location"],
-          context: context,
-        ),
-      ),
-      textAlign: TextAlign.right,
-      textDirection: TextDirection.rtl,
-    );
-  }
+// Widget displayWordText(
+//     int verseIndex,
+//     int wordIndex,
+//     SettingsState settingsState,
+//     AudioPlayerState audioPlayerState,
+//     SurahTrackerState surahTrackerState,
+//     BuildContext context) {
+//   return Text(
+//     widget.surahData[verseIndex]["words"][wordIndex][Utils.quranScriptName(
+//             quranScriptName: settingsState.selectedQuranScriptType)]
+//         .toString(),
+//     style: TextStyle(
+//       locale: const Locale("ar"),
+//       fontFamily: "${settingsState.selectedQuranScriptType}_font",
+//       fontSize: settingsState.quranTextFontSize.sp,
+//       height: 1.55,
+//       color: Utils.highlightTextWords(
+//         audioPlayerHighlightedWordLocation:
+//             audioPlayerState.highlightWordLocation,
+//         surahTrackerHighlightedWordLocation: surahTrackerState.highlightWord,
+//         quranDisplayType: QuranDisplayType.surah,
+//         audioPlayerQuranDisplayType: audioPlayerState.quranDisplayType,
+//         currentWordLocation: widget.surahData[verseIndex]["words"][wordIndex]
+//             ["location"],
+//         context: context,
+//       ),
+//     ),
+//     textAlign: TextAlign.right,
+//     textDirection: TextDirection.rtl,
+//   );
+// }
 }

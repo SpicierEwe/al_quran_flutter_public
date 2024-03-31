@@ -11,6 +11,7 @@ import 'package:al_quran_new/presentation/more_section/salah_times_display_scree
 import 'package:al_quran_new/presentation/settings_screens/settings_screen.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/change_reciter_settings_sub_screen.dart';
 import 'package:al_quran_new/presentation/surah_display_screen/surah_display_screen.dart';
+import 'package:al_quran_new/presentation/surah_display_screen/surah_info_displayscreen/surah_info_display_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -58,6 +59,11 @@ class AppRouter {
               path: "surah_display_screen",
               builder: (BuildContext context, GoRouterState state) =>
                   const SurahDisplayScreen()),
+          GoRoute(
+            path: "surah_info_display_screen/:surahId",
+            builder: (context, state) => SurahInfoDisplayScreen(
+                surahId: int.parse(state.pathParameters['surahId']!)),
+          ),
           GoRoute(
               path: "settings",
               builder: (BuildContext context, GoRouterState state) =>

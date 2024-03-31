@@ -103,7 +103,10 @@ class _AyahOnClickButtonState extends State<AyahOnClickButton> {
       {
         "name": "Settings",
         "icon": Icons.settings_rounded,
-        "onPressed": () {},
+        "onPressed": () {
+          context.push('/settings');
+          context.pop();
+        },
       },
     ];
 

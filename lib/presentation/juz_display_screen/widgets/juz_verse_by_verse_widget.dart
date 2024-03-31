@@ -77,7 +77,8 @@ class _JuzVerseByVerseModeState extends State<JuzVerseByVerseMode> {
 
       if (firstIndex != null) {
         EasyDebounce.debounce(
-            'my-debouncer', // <-- An ID for this particular debounce
+            'juz_verse_by_verse_debouncer',
+            // <-- An ID for this particular debounce
             const Duration(milliseconds: 200), // <-- The debounce duration
             () {
           context.read<SurahTrackerBloc>().add(

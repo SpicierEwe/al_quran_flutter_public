@@ -27,8 +27,7 @@ class QuranDataApis {
   ///
   /// The [chapterId] parameter specifies the ID of the chapter to be fetched.
   static String getArabicChapterApi({required String chapterId}) {
-
-    // use V2 code when you use Ayman Tajweed font
+    // use V2 code when you use Ayman's Tajweed font
     // return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq%2Ccode_v2&per_page=all";
     //
     return "https://api.quran.com/api/qdc/verses/by_chapter/$chapterId?words=true&fields=&word_fields=verse_key%2Cverse_id%2Cpage_number%2Clocation%2Cqpc_uthmani_hafs%2Ctext_qpc_nastaleeq&per_page=all";
@@ -82,7 +81,7 @@ class QuranDataApis {
 
 //   =================================== tafsir API =====================================
 //   ========= SINGLE TAFSIR API NOT WORKING, so not implemented tafsir yet============
-  static String getAllTafsirsMetaData() =>
+  static String getAllTafsirsMetaDataApi() =>
       "https://api.quran.com/api/v4/resources/tafsirs";
 
   static String getTafsirForSpecificVerseApi(
@@ -90,5 +89,11 @@ class QuranDataApis {
       required String chapterId,
       required String verseId}) {
     return "https://api.quran.com/api/v4/tafsirs/$tafsirId?chapter_number=$chapterId&verse_key=$verseId";
+  }
+
+//   Surah Info API
+  static String getSurahInfoApi(
+      {required String surahId, required String languageIsoCode}) {
+    return "https://api.quran.com/api/v4/chapters/$surahId/info?language=$languageIsoCode";
   }
 }

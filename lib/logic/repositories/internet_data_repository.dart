@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:al_quran_new/apis/salah_apis.dart';
 import 'package:al_quran_new/logic/repositories/local_data_repository.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -476,6 +474,41 @@ class InternetDataRepository {
     } else {
       if (onError != null) {
         onError(response.statusCode);
+        return;
+      }
+    }
+  }
+
+//   get Surah Info
+
+  static Future<void> getSurahInfo({
+    required String surahId,
+    required String languageIsoCode,
+    required Function(dynamic)? onCompleted,
+    required Function(dynamic)? onError,
+  }) async {
+    try {
+      final response = await _client.get(Uri.parse(
+          QuranDataApis.getSurahInfoApi(
+              surahId: surahId, languageIsoCode: languageIsoCode)));
+
+      if (response.statusCode == 200) {
+        var decodedData = await jsonDecode(response.body)["chapter_info"];
+
+        if (onCompleted != null) {
+          onCompleted(decodedData);
+        }
+
+        // Save to local data repository (Hive)
+      } else {
+        if (onError != null) {
+          onError(response.statusCode);
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError(e);
         return;
       }
     }

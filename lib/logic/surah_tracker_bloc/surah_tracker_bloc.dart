@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:al_quran_new/logic/juz_display_bloc/juz_display_bloc.dart';
 import 'package:al_quran_new/logic/surah_display_bloc/surah_display_bloc.dart';
 import 'package:bloc/bloc.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:logger/logger.dart';
 
 import 'package:meta/meta.dart';
@@ -21,25 +22,26 @@ class SurahTrackerBloc extends Bloc<SurahTrackerEvent, SurahTrackerState> {
       : super(const SurahTrackerState()) {
     // Surah Display  ======
     on<SurahDisplayUpdatePageHizbManzilVerseByVerseModeEvent>(
-        (event, emit) async {
-      {
-        emit(state.copyWith(
-          pageHizbManzilData: [
-            surahDisplayBloc.state.surahData![event.scrollPositionIndex]
-                ["page_number"],
-            surahDisplayBloc.state.surahData![event.scrollPositionIndex]
-                ["hizb_number"],
-            surahDisplayBloc.state.surahData![event.scrollPositionIndex]
-                ["manzil_number"]
-          ],
-          verseByVerseScrolledVerseIndex: event.scrollPositionIndex,
-          chapterId: event.chapterId,
-        ));
+      (event, emit) async {
+        {
+          emit(state.copyWith(
+            pageHizbManzilData: [
+              surahDisplayBloc.state.surahData![event.scrollPositionIndex]
+                  ["page_number"],
+              surahDisplayBloc.state.surahData![event.scrollPositionIndex]
+                  ["hizb_number"],
+              surahDisplayBloc.state.surahData![event.scrollPositionIndex]
+                  ["manzil_number"]
+            ],
+            verseByVerseScrolledVerseIndex: event.scrollPositionIndex,
+            chapterId: event.chapterId,
+          ));
 
-        Logger().i(
-            "scrollPositionIndex  : ${event.scrollPositionIndex} event_chapterId : ${event.chapterId} state_chapter_id : ${state.chapterId} ");
-      }
-    });
+          Logger().i(
+              "scrollPositionIndex  : ${event.scrollPositionIndex} event_chapterId : ${event.chapterId} state_chapter_id : ${state.chapterId} ");
+        }
+      },
+    );
 
     // Surah update hisb manzil page mushaf mode  ======
     on<SurahDisplayUpdatePageHizbManzilMushafModeEvent>((event, emit) async {

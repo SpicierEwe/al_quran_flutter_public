@@ -93,8 +93,7 @@ class LocalDataRepository {
   /// [chapterId]: The identifier for the Quran chapter.
   /// Returns a list of Quran Arabic chapter data, or null if not found.
   static List? getStoredQuranChapterTranslation(
-      {required int translationId, required int chapterId }) {
-
+      {required int translationId, required int chapterId}) {
     final data = box.get("${translationId}_$chapterId");
     // Logger().i(data + "${translationId}_$chapterId");
     Logger().i("${translationId}_$chapterId");
@@ -102,7 +101,6 @@ class LocalDataRepository {
       return jsonDecode(data);
     } else {
       return null;
-
     }
   }
 
@@ -125,4 +123,26 @@ class LocalDataRepository {
       return [];
     }
   }
+
+//   retrieve stored chapter info
+
+  static void getStoredSurahInfo({
+    required String surahId,
+    required String languageIsoCode,
+    required Function(dynamic)? onRetrieved,
+    required Function(dynamic)? dataNotFound,
+  }) {
+    final data = box.get("info_${surahId}_$languageIsoCode");
+    if (data != null) {
+      if (onRetrieved != null) {
+        onRetrieved(jsonDecode(data));
+      }
+    } else {
+      if (dataNotFound != null) {
+        dataNotFound("Data not found");
+      }
+    }
+  }
+
+// ============== Clearing Stored Data  =================
 }

@@ -6,6 +6,7 @@ import 'package:al_quran_new/core/constants/variables.dart';
 import 'package:al_quran_new/logic/bookmark_bloc/bookmark_bloc.dart';
 import 'package:al_quran_new/logic/display_type_switcher_bloc/display_type_switcher_bloc.dart';
 import 'package:al_quran_new/presentation/widgets/ayah_on_click_menu/ayah_on_click_menu.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
@@ -67,11 +68,14 @@ class _SurahMushafModeWidgetState extends State<SurahMushafModeWidget> {
       final firstIndex = positions.isNotEmpty ? positions.first.index : null;
 
       if (firstIndex != null) {
-        context
-            .read<SurahTrackerBloc>()
-            .add(SurahDisplayUpdatePageHizbManzilMushafModeEvent(
-              scrollPositionIndex: firstIndex,
-            ));
+        EasyDebounce.debounce(
+            'surah_mushaf_mode_debouncer',
+            const Duration(milliseconds: 500),
+            () => context
+                .read<SurahTrackerBloc>()
+                .add(SurahDisplayUpdatePageHizbManzilMushafModeEvent(
+                  scrollPositionIndex: firstIndex,
+                )));
 
         // Logger().i("firstIndex  : " + firstIndex.toString());
       }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 import '../../logic/audio_player_bloc/audio_player_bloc.dart';
 import '../../logic/language_bloc/language_bloc.dart';
@@ -15,6 +16,7 @@ import '../../logic/settings_bloc/settings_bloc.dart';
 import '../../logic/surah_names_bloc/surah_names_bloc.dart';
 import '../../logic/surah_tracker_bloc/surah_tracker_bloc.dart';
 import '../constants/variables.dart';
+import 'package:flutter/services.dart';
 
 /// A utility class providing common functions for Quran-related operations.
 class Utils {
@@ -39,6 +41,7 @@ class Utils {
         return "qpc_uthmani_hafs";
       case "indopak":
         return "text_qpc_nastaleeq";
+      // return "text_indopak";
 
       //     there is no case for tajweed cause they are word images not fonts
     }
@@ -199,7 +202,24 @@ class Utils {
       {required int surahIndex,
       double fontSize = 29,
       Color? color,
+      bool useNewSurahFont = false,
       required BuildContext context}) {
+    // if useNewSurahFont is true, use the new font
+    if (useNewSurahFont) {
+      return Text(AppVariables.surahNamesIconList[surahIndex].padRight(3, "0"),
+          style: TextStyle(
+            fontSize: fontSize.sp,
+            fontFamily: "surah_arabic_name_font_new",
+            fontWeight: FontWeight.normal,
+            // todo implement theme color
+            color: color ??
+                (Theme.of(context).brightness == Brightness.dark
+                    ? AppVariables.companyColorGold
+                    : const Color(0xff223C63)),
+          ),
+          textAlign: TextAlign.right);
+    }
+    // if useNewSurahFont is false, use the old font
     return Text(AppVariables.surahNamesIconList[surahIndex],
         style: TextStyle(
           fontSize: fontSize.sp,
@@ -245,7 +265,7 @@ class Utils {
       ),
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(
+          image: const AssetImage(
             "assets/images/surah_info_bg.jpg",
           ),
           fit: BoxFit.contain,
@@ -311,13 +331,31 @@ class Utils {
                     padding: EdgeInsets.symmetric(
                       horizontal: 7.w,
                     ),
-                    child: Center(
-                      child: Utils.displaySurahNamesArabicIcon(
-                        context: context,
-                        surahIndex: surahIndex,
-                        fontSize: 35,
-                        color: Colors.white,
-                      ),
+                    child: Row(
+                      children: [
+                        // surah arabic name
+                        Expanded(
+                          flex: 7,
+                          child: Utils.displaySurahNamesArabicIcon(
+                            context: context,
+                            surahIndex: surahIndex,
+                            fontSize: 35,
+                            color: Colors.white,
+                          ),
+                        ),
+                        // surah info button
+                        IconButton(
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              context.push(
+                                "/surah_info_display_screen/${surahIndex + 1}",
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.info_outline_rounded,
+                              color: Colors.white,
+                            ))
+                      ],
                     ),
                   ),
                 ),
@@ -333,8 +371,8 @@ class Utils {
                       vertical: 15,
                       horizontal: 15,
                     ),
-                    decoration: BoxDecoration(
-                      image: const DecorationImage(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
                         image: AssetImage(
                           "assets/images/small_border.png",
                         ),
@@ -621,6 +659,21 @@ class Utils {
     }
 
     return null;
+  }
+
+  static TextDirection translationTextDirection(
+      {required BuildContext context}) {
+    if (context
+            .read<LanguageBloc>()
+            .state
+            .selectedLanguage["direction"]
+            .toString()
+            .toLowerCase() ==
+        "ltr") {
+      return TextDirection.ltr;
+    }
+
+    return TextDirection.rtl;
   }
 
   static double translationFontsLineHeights({required BuildContext context}) {
