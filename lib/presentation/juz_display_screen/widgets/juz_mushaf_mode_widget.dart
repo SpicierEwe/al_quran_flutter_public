@@ -148,22 +148,14 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
                 ),
                 child: Column(
                   children: [
-                    // show bismillah
-                    if (pageIndex == 0 &&
-                        widget.juzId != 1 &&
-                        widget.juzId != 9)
-                      Padding(
-                        padding: EdgeInsets.only(top: 2.1.h, bottom: 1.5.h),
-                        child: Text(
-                          "﷽",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                                  fontSize: 30.sp,
-                                  fontFamily: "bismillah_font"),
-                        ),
+                    // the padding on the top of the first page of the juz seems off so added some
+                    if (pageIndex == 0)
+                      Container(
+                        padding: EdgeInsets.only(top: 1.5.h),
                       ),
+                    // Container(
+                    //   padding: EdgeInsets.only(top: .1.h, bottom: 1.5.h),
+                    // ),
                     Column(
                       children: [
                         Wrap(
@@ -175,142 +167,11 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
                             // Text(pageData.toString()),
                             // Adding a condition to show "new surah" text when verseIndex is 0
 
-                            for (int verseIndex = 0;
-                                verseIndex < pageData.length;
-                                verseIndex++)
-                              for (int wordIndex = 0;
-                                  wordIndex <
-                                      pageData[verseIndex]["words"].length;
-                                  wordIndex++)
-
-                                // TOOL TIP
-
-                                Tooltip(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? AppVariables.companyColorGold
-                                        : Colors.black,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: Colors.white),
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  preferBelow: false,
-                                  showDuration: const Duration(seconds: 10),
-
-                                  // when tool tip is triggered it will also highlight the word
-                                  onTriggered: () async {
-                                    // Handle the tap for the specific word
-
-                                    context
-                                        .read<SurahTrackerBloc>()
-                                        .add(UpdateHighlightWordEvent(
-                                          wordLocation: pageData[verseIndex]
-                                              ["words"][wordIndex]["location"],
-                                        ));
-
-                                    if (!context
-                                        .read<AudioPlayerBloc>()
-                                        .state
-                                        .isAudioPlaying) {
-                                      await widget.player.play(UrlSource(
-                                          "https://audio.qurancdn.com/${pageData[verseIndex]["words"][wordIndex]["audio_url"]}"));
-                                    }
-                                  },
-                                  message: pageData[verseIndex]["words"]
-                                      [wordIndex]["translation"]["text"],
-                                  child: BlocBuilder<AudioPlayerBloc,
-                                      AudioPlayerState>(
-                                    builder: (context, audioPlayerState) {
-                                      return BlocBuilder<SurahTrackerBloc,
-                                          SurahTrackerState>(
-                                        builder: (context, surahTrackerState) {
-                                          int surahId = int.parse(
-                                              pageData[verseIndex]["verse_key"]
-                                                  .toString()
-                                                  .split(":")[0]);
-                                          // realWordIndex  and realVerseIndex are used to get the real index of the word and verse in the quran
-                                          // cause page data have their own array index which doesn't reflect the actual quran index
-                                          int realWordIndex = int.parse(
-                                                  pageData[verseIndex]["words"]
-                                                              [wordIndex]
-                                                          ["location"]
-                                                      .toString()
-                                                      .split(":")[2]) -
-                                              1;
-
-                                          int realVerseIndex = int.parse(
-                                                  pageData[verseIndex]["words"]
-                                                              [wordIndex]
-                                                          ["location"]
-                                                      .toString()
-                                                      .split(":")[1]) -
-                                              1;
-                                          return AyahOnClickButton(
-                                            themeState: widget.themeBloc.state,
-                                            quranDisplayType:
-                                                QuranDisplayType.juz,
-                                            surahId: surahId,
-                                            verseIndex: realVerseIndex,
-                                            isGestureDetector: true,
-                                            child: Container(
-                                              // "${pageData[verseIndex]["verse_key"]}"),
-
-                                              // highlight the entire verse containing the word with word itself when a word is selected
-                                              color: Utils.highlightVerseInMushafMode(
-                                                  audioPlayerHighlightedWordLocation:
-                                                      audioPlayerState
-                                                          .highlightWordLocation,
-                                                  currentVerseKey:
-                                                      pageData[verseIndex]
-                                                          ["verse_key"],
-                                                  pageIndex: pageIndex,
-                                                  quranDisplayType:
-                                                      QuranDisplayType.juz,
-                                                  audioPlayerQuranDisplayType:
-                                                      audioPlayerState
-                                                          .quranDisplayType,
-                                                  surahTrackerHighlightedWordLocation:
-                                                      surahTrackerState
-                                                          .highlightWord,
-                                                  context: context),
-
-                                              child: settingsState
-                                                          .selectedQuranScriptType ==
-                                                      "tajweed"
-                                                  ? displayTajweedImages(
-                                                      surahId: surahId,
-                                                      audioPlayerState:
-                                                          audioPlayerState,
-                                                      pageData: pageData,
-                                                      verseIndex: verseIndex,
-                                                      wordIndex: wordIndex,
-                                                      surahTrackerState:
-                                                          surahTrackerState,
-                                                      realWordIndex:
-                                                          realWordIndex,
-                                                      realVerseIndex:
-                                                          realVerseIndex,
-                                                      settingsState:
-                                                          settingsState)
-                                                  : displayOtherScriptTextWords(
-                                                      pageData,
-                                                      verseIndex,
-                                                      wordIndex,
-                                                      settingsState,
-                                                      audioPlayerState,
-                                                      surahTrackerState,
-                                                      context),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                                )
+                            ..._buildVerses(
+                                pageData: pageData,
+                                pageIndex: pageIndex,
+                                settingsState: settingsState,
+                                context: context)
                           ],
                         ),
                       ],
@@ -332,6 +193,153 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
         );
       },
     );
+  }
+
+  List<Widget> _buildVerses({
+    required List<dynamic> pageData,
+    required int pageIndex,
+    required SettingsState settingsState,
+    required BuildContext context,
+  }) {
+    List<Widget> verses = [];
+
+    for (int verseIndex = 0; verseIndex < pageData.length; verseIndex++) {
+      int surahId =
+          int.parse(pageData[verseIndex]["verse_key"].toString().split(":")[0]);
+      int actualVerseIndex = int.parse(
+              pageData[verseIndex]["verse_key"].toString().split(":")[1]) -
+          1;
+
+      // when the actualVerseIndex is 0, it means it's the first verse of the surah
+      if (actualVerseIndex == 0) {
+        verses.add(
+          Container(
+              margin: EdgeInsets.only(bottom: 1.5.h, top: 1.5.h),
+              child: Column(
+                children: [
+                  Utils.surahTopInfo(context: context, surahIndex: surahId),
+                  // show bismillah
+                  if (surahId != 9 || surahId != 1)
+                    Padding(
+                      padding: EdgeInsets.only(top: 2.1.h, bottom: 1.5.h),
+                      child: Text(
+                        "﷽",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontSize: 30.sp, fontFamily: "bismillah_font"),
+                      ),
+                    ),
+                ],
+              )),
+        );
+      }
+      for (int wordIndex = 0;
+          wordIndex < pageData[verseIndex]["words"].length;
+          wordIndex++) {
+        // TOOL TIP
+
+        verses.add(Tooltip(
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppVariables.companyColorGold
+                : Colors.black,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          textStyle: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Colors.white),
+          triggerMode: TooltipTriggerMode.tap,
+          preferBelow: false,
+          showDuration: const Duration(seconds: 10),
+
+          // when tool tip is triggered it will also highlight the word
+          onTriggered: () async {
+            // Handle the tap for the specific word
+
+            context.read<SurahTrackerBloc>().add(UpdateHighlightWordEvent(
+                  wordLocation: pageData[verseIndex]["words"][wordIndex]
+                      ["location"],
+                ));
+
+            if (!context.read<AudioPlayerBloc>().state.isAudioPlaying) {
+              await widget.player.play(UrlSource(
+                  "https://audio.qurancdn.com/${pageData[verseIndex]["words"][wordIndex]["audio_url"]}"));
+            }
+          },
+          message: pageData[verseIndex]["words"][wordIndex]["translation"]
+              ["text"],
+          child: BlocBuilder<AudioPlayerBloc, AudioPlayerState>(
+            builder: (context, audioPlayerState) {
+              return BlocBuilder<SurahTrackerBloc, SurahTrackerState>(
+                builder: (context, surahTrackerState) {
+                  int surahId = int.parse(pageData[verseIndex]["verse_key"]
+                      .toString()
+                      .split(":")[0]);
+                  // realWordIndex  and realVerseIndex are used to get the real index of the word and verse in the quran
+                  // cause page data have their own array index which doesn't reflect the actual quran index
+                  int realWordIndex = int.parse(pageData[verseIndex]["words"]
+                              [wordIndex]["location"]
+                          .toString()
+                          .split(":")[2]) -
+                      1;
+
+                  int realVerseIndex = int.parse(pageData[verseIndex]["words"]
+                              [wordIndex]["location"]
+                          .toString()
+                          .split(":")[1]) -
+                      1;
+                  return AyahOnClickButton(
+                    themeState: widget.themeBloc.state,
+                    quranDisplayType: QuranDisplayType.juz,
+                    surahId: surahId,
+                    verseIndex: realVerseIndex,
+                    isGestureDetector: true,
+                    child: Container(
+                      // "${pageData[verseIndex]["verse_key"]}"),
+
+                      // highlight the entire verse containing the word with word itself when a word is selected
+                      color: Utils.highlightVerseInMushafMode(
+                          audioPlayerHighlightedWordLocation:
+                              audioPlayerState.highlightWordLocation,
+                          currentVerseKey: pageData[verseIndex]["verse_key"],
+                          pageIndex: pageIndex,
+                          quranDisplayType: QuranDisplayType.juz,
+                          audioPlayerQuranDisplayType:
+                              audioPlayerState.quranDisplayType,
+                          surahTrackerHighlightedWordLocation:
+                              surahTrackerState.highlightWord,
+                          context: context),
+
+                      child: settingsState.selectedQuranScriptType == "tajweed"
+                          ? displayTajweedImages(
+                              surahId: surahId,
+                              audioPlayerState: audioPlayerState,
+                              pageData: pageData,
+                              verseIndex: verseIndex,
+                              wordIndex: wordIndex,
+                              surahTrackerState: surahTrackerState,
+                              realWordIndex: realWordIndex,
+                              realVerseIndex: realVerseIndex,
+                              settingsState: settingsState)
+                          : displayOtherScriptTextWords(
+                              pageData,
+                              verseIndex,
+                              wordIndex,
+                              settingsState,
+                              audioPlayerState,
+                              surahTrackerState,
+                              context),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ));
+      }
+    }
+
+    return verses;
   }
 
   Text displayOtherScriptTextWords(
@@ -363,13 +371,6 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
           context: context,
         ),
       ),
-      // color: audioPlayerState.highlightWordLocation ==
-      //         pageData[verseIndex]["words"][wordIndex]["location"]
-      //     ? Colors.red
-      //     : surahTrackerState.highlightWord ==
-      //             pageData[verseIndex]["words"][wordIndex]["location"]
-      //         ? Colors.orange
-      //         : Theme.of(context).textTheme.bodyLarge!.color),
       textAlign: TextAlign.right,
       textDirection: TextDirection.rtl,
     );
