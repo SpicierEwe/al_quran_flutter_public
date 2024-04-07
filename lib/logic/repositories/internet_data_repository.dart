@@ -146,40 +146,17 @@ class InternetDataRepository {
     Function(String)? onCompleted,
   }) async {
     try {
+      List<Future> downloadTasks = [];
+
       for (int chapterId = 1; chapterId <= totalChapterCount; chapterId++) {
-        String progressPercentage =
-            "${(chapterId / totalChapterCount * 100).toInt()}%";
-        final response = await _client.get(Uri.parse(
-            QuranDataApis.getArabicChapterApi(
-                chapterId: chapterId.toString())));
-
-        if (response.statusCode == 200) {
-          final List<dynamic> decodedData =
-              await jsonDecode(response.body)["verses"];
-
-          // Save to local data repository (Hive)
-          LocalDataRepository.storeQuranArabicChapter(
-              data: jsonEncode(decodedData), chapterId: chapterId);
-
-          Logger().i("Downloaded chapter $chapterId returned");
-          // Notify progress
-          if (onProgress != null) {
-            onProgress(chapterId, totalChapterCount, progressPercentage);
-          }
-
-          // Execute the success callback if provided
-          if (onSuccess != null) {
-            onSuccess(decodedData);
-          }
-        } else {
-          if (onError != null) {
-            onError(
-                'Failed to download chapter $chapterId. Status code: ${response.statusCode}');
-
-            return;
-          }
-        }
+        downloadTasks.add(_downloadChapter(
+            chapterId: chapterId,
+            onProgress: onProgress,
+            onError: onError,
+            onSuccess: onSuccess));
       }
+
+      await Future.wait(downloadTasks);
 
       if (onCompleted != null) {
         onCompleted("Quran downloaded Successfully");
@@ -189,8 +166,51 @@ class InternetDataRepository {
       if (onError != null) {
         onError(
             'Failed to download quran Script. Status code: ${e.toString()}');
+      }
+    }
+  }
 
-        return;
+  static Future<void> _downloadChapter({
+    required int chapterId,
+    required ProgressCallback? onProgress,
+    required Function(dynamic)? onError,
+    required Function(List<dynamic>)? onSuccess,
+  }) async {
+    try {
+      String progressPercentage =
+          "${(chapterId / totalChapterCount * 100).toInt()}%";
+      final response = await _client.get(Uri.parse(
+          QuranDataApis.getArabicChapterApi(chapterId: chapterId.toString())));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> decodedData =
+            await jsonDecode(response.body)["verses"];
+
+        // Save to local data repository (Hive)
+        LocalDataRepository.storeQuranArabicChapter(
+            data: jsonEncode(decodedData), chapterId: chapterId);
+
+        Logger().i("Downloaded chapter $chapterId returned");
+        // Notify progress
+        if (onProgress != null) {
+          onProgress(chapterId, totalChapterCount, progressPercentage);
+        }
+
+        // Execute the success callback if provided
+        if (onSuccess != null) {
+          onSuccess(decodedData);
+        }
+      } else {
+        if (onError != null) {
+          onError(
+              'Failed to download chapter $chapterId. Status code: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      print('Error in _downloadChapter: $e');
+      if (onError != null) {
+        onError(
+            'Failed to download chapter $chapterId. Error: ${e.toString()}');
       }
     }
   }

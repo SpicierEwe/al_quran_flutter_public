@@ -290,17 +290,9 @@ class _JuzVerseByVerseModeState extends State<JuzVerseByVerseMode> {
                                                       wordIndex++)
                                                     // TOOL TIP
                                                     Tooltip(
-                                                      decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                                    .brightness ==
-                                                                Brightness.dark
-                                                            ? AppVariables
-                                                                .companyColorGold
-                                                            : Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
+                                                      decoration: Utils
+                                                          .toolTipDecoration(
+                                                              context: context),
                                                       textStyle:
                                                           Theme.of(context)
                                                               .textTheme

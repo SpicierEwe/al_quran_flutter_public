@@ -719,10 +719,7 @@ class Utils {
                 wordIndex++)
               // TOOL TIP
               Tooltip(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
+                  decoration: toolTipDecoration(context: context),
                   triggerMode: TooltipTriggerMode.tap,
                   preferBelow: false,
                   showDuration: const Duration(seconds: 10),
@@ -835,5 +832,16 @@ class Utils {
     }
 
     return null;
+  }
+
+// toolTip decoration
+
+  static BoxDecoration toolTipDecoration({required BuildContext context}) {
+    return BoxDecoration(
+      color: Theme.of(context).brightness == Brightness.dark
+          ? AppVariables.companyColorGold
+          : Colors.black,
+      borderRadius: BorderRadius.circular(5),
+    );
   }
 }

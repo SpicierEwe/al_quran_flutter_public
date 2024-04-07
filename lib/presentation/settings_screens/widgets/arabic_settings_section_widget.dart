@@ -362,7 +362,7 @@ class _ArabicSettingsSectionWidgetState
             children: [
               Center(
                 child: Text(
-                  "* for Tajweed, Internet is required.",
+                  "* for Tajweed, Internet is required. \n Might see some performance issue in older phones.",
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!

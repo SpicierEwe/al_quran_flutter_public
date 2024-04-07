@@ -1,4 +1,6 @@
 // Import necessary packages and files
+import 'dart:async';
+
 import 'package:al_quran_new/logic/repositories/internet_data_repository.dart';
 import 'package:al_quran_new/logic/repositories/local_data_repository.dart';
 import 'package:al_quran_new/logic/surah_names_bloc/surah_names_bloc.dart';
@@ -239,12 +241,19 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
       message: "Downloading Quran...",
     ));
 
-    await InternetDataRepository.downloadFullQuranArabicScript(
+    // increases with each chapter download
+    int taskCompleted = 0;
+    InternetDataRepository.downloadFullQuranArabicScript(
       onProgress: (currentChapter, totalChapters, progressPercentage) {
+        // updating the task completed
+        taskCompleted += 1;
+
+        final String progress =
+            ((taskCompleted / 114) * 100).toInt().toString();
         emit(state.copyWith(
           message:
-              "Downloading chapter $currentChapter of $totalChapters | $progressPercentage",
-          progressPercentage: progressPercentage,
+              "Downloading chapter $taskCompleted of $totalChapters | $progress %",
+          progressPercentage: progress,
         ));
       },
       onSuccess: (List<dynamic> value) {
@@ -390,7 +399,8 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
     } else {
       // Emit success state
       emit(state.copyWith(
-        lastFetchedDate: DateFormat("d MMM yyyy h:mm aa").format(DateTime.now()),
+        lastFetchedDate:
+            DateFormat("d MMM yyyy h:mm aa").format(DateTime.now()),
         message: "Download completed",
         isSnackbarVisible: false,
         isDownloading: false,

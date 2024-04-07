@@ -238,12 +238,7 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
         // TOOL TIP
 
         verses.add(Tooltip(
-          decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? AppVariables.companyColorGold
-                : Colors.black,
-            borderRadius: BorderRadius.circular(5),
-          ),
+          decoration: Utils.toolTipDecoration(context: context),
           textStyle: Theme.of(context)
               .textTheme
               .bodyMedium

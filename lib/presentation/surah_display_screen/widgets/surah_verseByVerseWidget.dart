@@ -255,17 +255,9 @@ class _SurahVerseByVerseModeState extends State<SurahVerseByVerseMode> {
                                                   wordIndex++)
                                                 // TOOL TIP
                                                 Tooltip(
-                                                    decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                                  .brightness ==
-                                                              Brightness.dark
-                                                          ? AppVariables
-                                                              .companyColorGold
-                                                          : Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
+                                                    decoration:
+                                                        Utils.toolTipDecoration(
+                                                            context: context),
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .bodyMedium
@@ -353,8 +345,7 @@ class _SurahVerseByVerseModeState extends State<SurahVerseByVerseMode> {
                                                                         .length),
                                                               )
                                                             : Utils.displayWordText(
-                                                                data: widget
-                                                                    .surahData,
+                                                                data: widget.surahData,
                                                                 context: context,
                                                                 verseIndex: verseIndex,
                                                                 wordIndex: wordIndex,
