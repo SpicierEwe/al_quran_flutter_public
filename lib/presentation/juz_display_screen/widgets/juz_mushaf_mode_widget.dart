@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:al_quran_new/logic/display_type_switcher_bloc/display_type_switcher_bloc.dart';
+import 'package:al_quran_new/presentation/widgets/ayah_on_click_menu/ayah_on_click_menu.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,7 +107,13 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
                         null
                 ? context.read<AudioPlayerBloc>().state.currentAudioPageIndex
                     as int
-                : 0,
+                : Utils.bookmarkedMushafPageIndex(
+                      juzIndex: widget.juzId - 1,
+                      isJuz: true,
+                      context: context,
+                      pages: widget.pages,
+                    ) ??
+                    0,
             addAutomaticKeepAlives: true,
             itemCount: widget.pages.length,
             itemPositionsListener: itemPositionsListener,
@@ -179,9 +186,6 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
                                 // TOOL TIP
 
                                 Tooltip(
-                                  // KEYYYYYYYYYYYYYYYYYYYYYYY
-                                  key: Key(
-                                      "${pageData[verseIndex]["words"][wordIndex]["location"]}"),
                                   decoration: BoxDecoration(
                                     color: Theme.of(context).brightness ==
                                             Brightness.dark
@@ -245,54 +249,62 @@ class _JuzMushafModeWidgetState extends State<JuzMushafModeWidget> {
                                                       .toString()
                                                       .split(":")[1]) -
                                               1;
-                                          return Container(
-                                            // "${pageData[verseIndex]["verse_key"]}"),
+                                          return AyahOnClickButton(
+                                            themeState: widget.themeBloc.state,
+                                            quranDisplayType:
+                                                QuranDisplayType.juz,
+                                            surahId: surahId,
+                                            verseIndex: realVerseIndex,
+                                            isGestureDetector: true,
+                                            child: Container(
+                                              // "${pageData[verseIndex]["verse_key"]}"),
 
-                                            // highlight the entire verse containing the word with word itself when a word is selected
-                                            color: Utils.highlightVerseInMushafMode(
-                                                audioPlayerHighlightedWordLocation:
-                                                    audioPlayerState
-                                                        .highlightWordLocation,
-                                                currentVerseKey:
-                                                    pageData[verseIndex]
-                                                        ["verse_key"],
-                                                pageIndex: pageIndex,
-                                                quranDisplayType:
-                                                    QuranDisplayType.juz,
-                                                audioPlayerQuranDisplayType:
-                                                    audioPlayerState
-                                                        .quranDisplayType,
-                                                surahTrackerHighlightedWordLocation:
-                                                    surahTrackerState
-                                                        .highlightWord,
-                                                context: context),
+                                              // highlight the entire verse containing the word with word itself when a word is selected
+                                              color: Utils.highlightVerseInMushafMode(
+                                                  audioPlayerHighlightedWordLocation:
+                                                      audioPlayerState
+                                                          .highlightWordLocation,
+                                                  currentVerseKey:
+                                                      pageData[verseIndex]
+                                                          ["verse_key"],
+                                                  pageIndex: pageIndex,
+                                                  quranDisplayType:
+                                                      QuranDisplayType.juz,
+                                                  audioPlayerQuranDisplayType:
+                                                      audioPlayerState
+                                                          .quranDisplayType,
+                                                  surahTrackerHighlightedWordLocation:
+                                                      surahTrackerState
+                                                          .highlightWord,
+                                                  context: context),
 
-                                            child: settingsState
-                                                        .selectedQuranScriptType ==
-                                                    "tajweed"
-                                                ? displayTajweedImages(
-                                                    surahId: surahId,
-                                                    audioPlayerState:
-                                                        audioPlayerState,
-                                                    pageData: pageData,
-                                                    verseIndex: verseIndex,
-                                                    wordIndex: wordIndex,
-                                                    surahTrackerState:
-                                                        surahTrackerState,
-                                                    realWordIndex:
-                                                        realWordIndex,
-                                                    realVerseIndex:
-                                                        realVerseIndex,
-                                                    settingsState:
-                                                        settingsState)
-                                                : displayOtherScriptTextWords(
-                                                    pageData,
-                                                    verseIndex,
-                                                    wordIndex,
-                                                    settingsState,
-                                                    audioPlayerState,
-                                                    surahTrackerState,
-                                                    context),
+                                              child: settingsState
+                                                          .selectedQuranScriptType ==
+                                                      "tajweed"
+                                                  ? displayTajweedImages(
+                                                      surahId: surahId,
+                                                      audioPlayerState:
+                                                          audioPlayerState,
+                                                      pageData: pageData,
+                                                      verseIndex: verseIndex,
+                                                      wordIndex: wordIndex,
+                                                      surahTrackerState:
+                                                          surahTrackerState,
+                                                      realWordIndex:
+                                                          realWordIndex,
+                                                      realVerseIndex:
+                                                          realVerseIndex,
+                                                      settingsState:
+                                                          settingsState)
+                                                  : displayOtherScriptTextWords(
+                                                      pageData,
+                                                      verseIndex,
+                                                      wordIndex,
+                                                      settingsState,
+                                                      audioPlayerState,
+                                                      surahTrackerState,
+                                                      context),
+                                            ),
                                           );
                                         },
                                       );

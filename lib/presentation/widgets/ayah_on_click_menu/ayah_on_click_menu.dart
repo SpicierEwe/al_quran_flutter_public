@@ -75,7 +75,12 @@ class _AyahOnClickButtonState extends State<AyahOnClickButton> {
       {
         "name": "Read Tafsir",
         "icon": Icons.menu_book_rounded,
-        "onPressed": () {},
+        "onPressed": () {
+          context.push(
+            '/verse_tafsir_display_screen/${widget.surahId}/${widget.verseIndex + 1}',
+          );
+          context.pop();
+        },
       },
       {
         "name": "Mark as Last Read",

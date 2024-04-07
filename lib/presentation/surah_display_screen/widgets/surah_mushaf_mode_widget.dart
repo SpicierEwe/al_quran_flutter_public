@@ -82,19 +82,6 @@ class _SurahMushafModeWidgetState extends State<SurahMushafModeWidget> {
     });
   }
 
-  // scroll to bookmarked  page index containing the bookmarked verse
-  int? bookmarkedPageIndex() {
-    if (context.read<BookmarkBloc>().state.lastRead["page_index"] != null) {
-      /*
-      * we are finding the page index cause the page index of surah rendering is different from
-      * the actual verse where here the index goes like  0, 1,2.... and actual surah indexes are
-      * related to the actual page index of the quran*/
-      return widget.pages.indexOf(
-          context.read<BookmarkBloc>().state.lastRead["page_index"] + 1);
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
@@ -120,15 +107,20 @@ class _SurahMushafModeWidgetState extends State<SurahMushafModeWidget> {
                         null
                 ? context.read<AudioPlayerBloc>().state.currentAudioPageIndex
                     as int
-                :
-
-                //     getting surah local  pageIndex
-                bookmarkedPageIndex() ?? 0,
+                : Utils.bookmarkedMushafPageIndex(
+                      surahIndex: widget.surahId - 1,
+                      context: context,
+                      pages: widget.pages,
+                    ) ??
+                    0,
             addAutomaticKeepAlives: true,
             itemCount: widget.pages.length,
             itemPositionsListener: itemPositionsListener,
             itemScrollController: itemScrollController,
             itemBuilder: (context, pageIndex) {
+              // Logger().i("pageData  : ${widget.surahData}");
+              // Logger().i("pages  : ${widget.pages.length}");
+              // Logger().i("index  : $pageIndex");
               List pageData = widget.surahData
                   .where((element) =>
                       element["page_number"] == widget.pages[pageIndex])
@@ -136,8 +128,6 @@ class _SurahMushafModeWidgetState extends State<SurahMushafModeWidget> {
 
               // page data gets the data of the page
 
-              // Logger()
-              //     .i("pageData  : " + pageData.toString());
               return Container(
                 decoration: BoxDecoration(
                   color: pageIndex % 2 == 1

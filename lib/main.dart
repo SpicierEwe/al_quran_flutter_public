@@ -16,6 +16,7 @@ import 'package:al_quran_new/logic/surah_display_bloc/surah_display_bloc.dart';
 import 'package:al_quran_new/logic/surah_info_bloc/surah_info_bloc.dart';
 import 'package:al_quran_new/logic/surah_names_bloc/surah_names_bloc.dart';
 import 'package:al_quran_new/logic/surah_tracker_bloc/surah_tracker_bloc.dart';
+import 'package:al_quran_new/logic/tafsir_bloc/tafsir_bloc.dart';
 import 'package:al_quran_new/logic/theme_bloc/theme_bloc.dart';
 import 'package:al_quran_new/presentation/router/app_router.dart';
 import 'package:al_quran_new/presentation/widgets/audio_bottom_bar.dart';
@@ -130,6 +131,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SurahInfoBloc>(
           create: (context) => SurahInfoBloc(
+            languageBloc: context.read<LanguageBloc>(),
+          ),
+        ),
+        BlocProvider<TafsirBloc>(
+          create: (context) => TafsirBloc(
             languageBloc: context.read<LanguageBloc>(),
           ),
         ),

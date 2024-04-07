@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../logic/config_bloc/config_bloc.dart';
+import '../widgets/ayah_on_click_menu/widgets/verse_tafsir_display_screen.dart';
 
 class AppRouter {
   /// The route configuration.
@@ -63,6 +64,13 @@ class AppRouter {
             path: "surah_info_display_screen/:surahId",
             builder: (context, state) => SurahInfoDisplayScreen(
                 surahId: int.parse(state.pathParameters['surahId']!)),
+          ),
+          GoRoute(
+            path: "verse_tafsir_display_screen/:surahId/:verseId",
+            builder: (context, state) => VerseTafsirDisplayScreen(
+              surahId: int.parse(state.pathParameters['surahId']!),
+              verseId: int.parse(state.pathParameters['verseId']!),
+            ),
           ),
           GoRoute(
               path: "settings",

@@ -94,16 +94,16 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                           bookmarkState.favourites[index]["surahIndex"];
                       final int verseIndex =
                           bookmarkState.favourites[index]["verseIndex"];
-
-                      final List<dynamic> surahData =
-                          LocalDataRepository.getStoredQuranArabicChapter(
-                              chapterId: surahIndex + 1)!;
-
-                      final String verseTranslation =
-                          LocalDataRepository.getStoredQuranChapterTranslation(
-                              chapterId: surahIndex + 1,
-                              translationId: settingsState
-                                  .selectedTranslationId)![verseIndex]["text"];
+                      //
+                      // final List<dynamic> surahData =
+                      //     LocalDataRepository.getStoredQuranArabicChapter(
+                      //         chapterId: surahIndex + 1)!;
+                      //
+                      // final String verseTranslation =
+                      //     LocalDataRepository.getStoredQuranChapterTranslation(
+                      //         chapterId: surahIndex + 1,
+                      //         translationId: settingsState
+                      //             .selectedTranslationId)![verseIndex]["text"];
                       return Column(
                         children: [
                           TextButton(
@@ -160,127 +160,15 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
                                 SizedBox(height: 2.1.h),
 
                                 //   verse display
-                                Wrap(
-                                  alignment: WrapAlignment.start,
-                                  textDirection: TextDirection.rtl,
-                                  spacing: Utils.wordSpacingSettings(
-                                      settingsState: settingsState),
-                                  children: [
-                                    for (int wordIndex = 0;
-                                        wordIndex <
-                                            surahData[verseIndex]["words"]
-                                                .length;
-                                        wordIndex++)
-                                      // TOOL TIP
-                                      Tooltip(
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          triggerMode: TooltipTriggerMode.tap,
-                                          preferBelow: false,
-                                          showDuration:
-                                              const Duration(seconds: 10),
-
-                                          // when tool tip is triggered it will also highlight the word
-                                          onTriggered: () async {
-                                            // Handle the tap for the specific word
-
-                                            context
-                                                .read<SurahTrackerBloc>()
-                                                .add(UpdateHighlightWordEvent(
-                                                    wordLocation:
-                                                        surahData[verseIndex]
-                                                                    ["words"]
-                                                                [wordIndex]
-                                                            ["location"]));
-
-                                            // if audio is  not playing then play the word when clicked
-                                            if (!context
-                                                .read<AudioPlayerBloc>()
-                                                .state
-                                                .isAudioPlaying) {
-                                              await audioPlayer.play(UrlSource(
-                                                  "https://audio.qurancdn.com/${surahData[verseIndex]["words"][wordIndex]["audio_url"]}"));
-                                            }
-                                          },
-                                          message: surahData[verseIndex]
-                                                  ["words"][wordIndex]
-                                              ["translation"]["text"],
-                                          child: settingsState
-                                                      .selectedQuranScriptType ==
-                                                  "tajweed"
-                                              ? Container(
-                                                  // highlight word images
-                                                  color: Utils.highlightTajweedWordImage(
-                                                      context: context,
-                                                      showRecitationWordHighlight:
-                                                          false,
-                                                      quranDisplayType:
-                                                          QuranDisplayType
-                                                              .surah,
-                                                      audioPlayerQuranDisplayType:
-                                                          context
-                                                              .read<
-                                                                  AudioPlayerBloc>()
-                                                              .state
-                                                              .quranDisplayType,
-                                                      audioPlayerHighlightedWordLocation: context
-                                                          .read<
-                                                              AudioPlayerBloc>()
-                                                          .state
-                                                          .highlightWordLocation,
-                                                      currentWordLocation:
-                                                          surahData[verseIndex]
-                                                                      ["words"]
-                                                                  [wordIndex]
-                                                              ["location"],
-                                                      surahTrackerHighlightedWordLocation:
-                                                          surahTrackerState
-                                                              .highlightWord),
-
-                                                  child: Utils
-                                                      .displayTajweedWordImages(
-                                                          context: context,
-                                                          wordIndex: wordIndex,
-                                                          verseIndex:
-                                                              verseIndex,
-                                                          settingsState:
-                                                              settingsState,
-                                                          surahId:
-                                                              surahIndex + 1,
-                                                          wordsLength: surahData[
-                                                                      verseIndex]
-                                                                  ["words"]
-                                                              .length),
-                                                )
-                                              : Utils.displayWordText(
-                                                  showRecitationWordHighlight:
-                                                      false,
-                                                  quranDisplayType:
-                                                      QuranDisplayType.surah,
-                                                  audioPlayerState: context
-                                                      .read<AudioPlayerBloc>()
-                                                      .state,
-                                                  surahTrackerState:
-                                                      surahTrackerState,
-                                                  context: context,
-                                                  verseIndex: verseIndex,
-                                                  wordIndex: wordIndex,
-                                                  settingsState: settingsState,
-                                                  data: surahData,
-                                                )),
-                                  ],
+                                Utils.displaySingleVerseWithTranslation(
+                                  settingsState: settingsState,
+                                  verseIndex: verseIndex,
+                                  context: context,
+                                  surahTrackerState: surahTrackerState,
+                                  surahIndex: surahIndex,
                                 ),
 
                                 // verse translation
-                                Utils.displayVerseTransliterationAndTranslation(
-                                    surahOrJuzData: surahData,
-                                    verseTranslation: verseTranslation,
-                                    settingsState: settingsState,
-                                    verseIndex: verseIndex,
-                                    context: context),
                               ],
                             ),
                           ),

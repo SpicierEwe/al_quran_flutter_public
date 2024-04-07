@@ -419,42 +419,6 @@ class InternetDataRepository {
     }
   }
 
-  static Future<void> getAlAdhanSalahTimes({
-    required String latitude,
-    required String longitude,
-    required Function(dynamic)? onCompleted,
-    required Function(dynamic)? onError,
-  }) async {
-    Logger().i("Latitude: $latitude, Longitude: $longitude");
-    try {
-      final response = await _client.get(Uri.parse(
-          SalahApis.alAdhanSalahTimesApi(
-              latitude: latitude, longitude: longitude)));
-
-      Logger().i(
-          "Al Adhan Salah Times URL : ${SalahApis.alAdhanSalahTimesApi(latitude: latitude, longitude: longitude)}");
-
-      if (response.statusCode == 200) {
-        var decodedData = await jsonDecode(response.body);
-
-        if (onCompleted != null) {
-          onCompleted(decodedData);
-        }
-      } else {
-        if (onError != null) {
-          onError(response.statusCode);
-          return;
-        }
-      }
-    } catch (e) {
-      if (onError != null) {
-        onError(e);
-
-        return;
-      }
-    }
-  }
-
   // GET QIBLA DIRECTION
   static Future<void> getQiblaDirection(
       {required String latitude,
@@ -494,6 +458,73 @@ class InternetDataRepository {
 
       if (response.statusCode == 200) {
         var decodedData = await jsonDecode(response.body)["chapter_info"];
+
+        if (onCompleted != null) {
+          onCompleted(decodedData);
+        }
+
+        // Save to local data repository (Hive)
+      } else {
+        if (onError != null) {
+          onError(response.statusCode);
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError(e);
+        return;
+      }
+    }
+  }
+
+//   get all Tafsir ids of all languages in one go
+
+  Future<void> getAllTafsirIds({
+    required Function(List)? onCompleted,
+    required Function(dynamic)? onError,
+  }) async {
+    try {
+      final response = await _client
+          .get(Uri.parse(QuranDataApis.getAllTafsirsMetaDataApi()));
+
+      if (response.statusCode == 200) {
+        var decodedData = await jsonDecode(response.body)["tafsirs"];
+
+        if (onCompleted != null) {
+          onCompleted(decodedData);
+        }
+
+        // Save to local data repository (Hive)
+      } else {
+        if (onError != null) {
+          onError(response.statusCode);
+          return;
+        }
+      }
+    } catch (e) {
+      if (onError != null) {
+        onError(e);
+        return;
+      }
+    }
+  } //    get tafsir
+
+  static Future<void> getTafsir({
+    required String tafsirId,
+    required String surahId,
+    required String verseId,
+    required Function(Map<String, dynamic>)? onCompleted,
+    required Function(dynamic)? onError,
+  }) async {
+    try {
+      final response = await _client.get(Uri.parse(
+          QuranDataApis.getTafsirForSpecificVerseApi(
+              tafsirId: tafsirId, verseId: verseId, chapterId: surahId)));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> decodedData =
+            await jsonDecode(response.body)["tafsir"];
 
         if (onCompleted != null) {
           onCompleted(decodedData);

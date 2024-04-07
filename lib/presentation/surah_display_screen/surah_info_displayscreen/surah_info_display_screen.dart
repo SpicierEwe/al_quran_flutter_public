@@ -54,14 +54,14 @@ class _SurahInfoDisplayScreenState extends State<SurahInfoDisplayScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_rounded),
-            onPressed: () {
-              context.push('/settings');
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.settings_rounded),
+        //     onPressed: () {
+        //       context.push('/settings');
+        //     },
+        //   ),
+        // ],
         title: Text.rich(
           TextSpan(
             children: [

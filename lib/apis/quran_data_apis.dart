@@ -1,3 +1,5 @@
+import 'package:logger/logger.dart';
+
 /// Class containing static methods to generate URLs for fetching Quranic data.
 class QuranDataApis {
 // Private constructor to prevent instantiation.
@@ -88,7 +90,9 @@ class QuranDataApis {
       {required String tafsirId,
       required String chapterId,
       required String verseId}) {
-    return "https://api.quran.com/api/v4/tafsirs/$tafsirId?chapter_number=$chapterId&verse_key=$verseId";
+    Logger().i(
+        "api : = https://api.quran.com/api/qdc/tafsirs/$tafsirId/by_ayah/$chapterId:$verseId");
+    return "https://api.qurancdn.com/api/qdc/tafsirs/$tafsirId/by_ayah/$chapterId:$verseId";
   }
 
 //   Surah Info API
