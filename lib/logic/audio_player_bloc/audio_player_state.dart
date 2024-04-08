@@ -4,6 +4,10 @@ part of 'audio_player_bloc.dart';
 class AudioPlayerState {
   final QuranDisplayType quranDisplayType;
 
+  // loops
+
+  final LoopType loopType;
+
   /* recitation data holds the data about the recitation of the chapter which help in the
     highlighting the words and while the audio is playing.
 
@@ -33,6 +37,7 @@ class AudioPlayerState {
 
   const AudioPlayerState({
     this.quranDisplayType = QuranDisplayType.surah,
+    this.loopType = LoopType.off,
     this.isPlayerVisible = false,
     this.surahTabController,
     this.surahVerseByVerseScrollController,
@@ -54,6 +59,7 @@ class AudioPlayerState {
 
   AudioPlayerState copyWith({
     QuranDisplayType? quranDisplayType,
+    LoopType? loopType,
     String? reciterId,
     String? currentSurahOrJuzId,
     bool? isAudioPlaying,
@@ -74,6 +80,7 @@ class AudioPlayerState {
   }) {
     return AudioPlayerState(
       quranDisplayType: quranDisplayType ?? this.quranDisplayType,
+      loopType: loopType ?? this.loopType,
       isPlayerVisible: isPlayerVisible ?? this.isPlayerVisible,
       surahTabController: surahTabController ?? this.surahTabController,
       surahVerseByVerseScrollController: surahVerseByVerseScrollController ??

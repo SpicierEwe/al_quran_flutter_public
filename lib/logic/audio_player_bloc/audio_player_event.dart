@@ -11,6 +11,12 @@ abstract class AudioPlayerEvent {}
 
  */
 
+class LoopAudioEvent extends AudioPlayerEvent {
+  final LoopType loopType;
+
+  LoopAudioEvent({required this.loopType});
+}
+
 class LoadAudioEvent extends AudioPlayerEvent {
   final String reciterId;
   final String surahOrJuzId;

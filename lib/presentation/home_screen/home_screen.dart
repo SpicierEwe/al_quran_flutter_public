@@ -73,72 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           length: 3,
           initialIndex: 0,
           child: Scaffold(
-            appBar: AppBar(
-              title: const Text(AppStrings.appName),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    context.push('/developer_screen');
-                  },
-                  icon: const Icon(Icons.developer_mode),
-                ),
-                // Go To last read
-                IconButton(
-                  enableFeedback: true,
-                  tooltip: "Go to last read",
-                  onPressed: () {
-                    // dispatching the event
-                    context.read<BookmarkBloc>().add(RedirectToBookmarkEvent(
-                          context: context,
-                        ));
-
-                    // then redirecting
-                    if (bookmarkState.lastRead["surah_index"] != null) {
-                      switch (bookmarkState.bookmarkType) {
-                        case BookmarkType.surah:
-                          context.push("/surah_display_screen");
-                          break;
-                        case BookmarkType.juz:
-                          context.push("/juz_display_screen");
-                          break;
-                      }
-                    }
-                  },
-                  icon: bookmarkState.lastRead["surah_index"] == null
-                      ? const Icon(Icons.bookmark_border_rounded)
-                      : const Icon(Icons.bookmark_rounded),
-                ), // DEVELOPER SCREEN
-
-                IconButton(
-                    onPressed: () {
-                      context.push('/favourites_screen');
-                    },
-                    icon: bookmarkState.favourites.isEmpty
-                        ? const Icon(Icons.star_border_rounded)
-                        : const Icon(Icons.star_rounded)),
-                IconButton(
-                  onPressed: () {
-                    context.push('/settings');
-                  },
-                  icon: const Icon(Icons.settings),
-                  tooltip: "Settings",
-                ),
-              ],
-              bottom: const TabBar(
-                indicatorWeight: 3.5,
-                tabs: [
-                  Tab(
-                    text: "Surahs",
-                  ),
-                  Tab(
-                    text: "Juz",
-                  ),
-                  Tab(
-                    text: "More",
-                  ),
-                ],
-              ),
-            ),
+            appBar: _defaultAppBar(context, bookmarkState),
             body: const TabBarView(
               children: [
                 SurahNamesWidget(),
@@ -149,6 +84,75 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
+    );
+  }
+
+  AppBar _defaultAppBar(BuildContext context, BookmarkState bookmarkState) {
+    return AppBar(
+      title: const Text(AppStrings.appName),
+      actions: [
+        IconButton(
+          onPressed: () {
+            context.push('/developer_screen');
+          },
+          icon: const Icon(Icons.developer_mode),
+        ),
+        // Go To last read
+        IconButton(
+          enableFeedback: true,
+          tooltip: "Go to last read",
+          onPressed: () {
+            // dispatching the event
+            context.read<BookmarkBloc>().add(RedirectToBookmarkEvent(
+                  context: context,
+                ));
+
+            // then redirecting
+            if (bookmarkState.lastRead["surah_index"] != null) {
+              switch (bookmarkState.bookmarkType) {
+                case BookmarkType.surah:
+                  context.push("/surah_display_screen");
+                  break;
+                case BookmarkType.juz:
+                  context.push("/juz_display_screen");
+                  break;
+              }
+            }
+          },
+          icon: bookmarkState.lastRead["surah_index"] == null
+              ? const Icon(Icons.bookmark_border_rounded)
+              : const Icon(Icons.bookmark_rounded),
+        ), // DEVELOPER SCREEN
+
+        IconButton(
+            onPressed: () {
+              context.push('/favourites_screen');
+            },
+            icon: bookmarkState.favourites.isEmpty
+                ? const Icon(Icons.star_border_rounded)
+                : const Icon(Icons.star_rounded)),
+        IconButton(
+          onPressed: () {
+            context.push('/settings');
+          },
+          icon: const Icon(Icons.settings),
+          tooltip: "Settings",
+        ),
+      ],
+      bottom: const TabBar(
+        indicatorWeight: 3.5,
+        tabs: [
+          Tab(
+            text: "Surahs",
+          ),
+          Tab(
+            text: "Juz",
+          ),
+          Tab(
+            text: "More",
+          ),
+        ],
+      ),
     );
   }
 }

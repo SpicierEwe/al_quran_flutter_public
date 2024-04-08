@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:al_quran_new/core/constants/enums.dart';
 import 'package:al_quran_new/core/constants/non_segmented_reciters.dart';
 import 'package:al_quran_new/core/constants/variables.dart';
 import 'package:al_quran_new/core/utils/utils.dart';
@@ -7,6 +8,7 @@ import 'package:al_quran_new/logic/audio_bottom_bar_bloc/audio_bottom_bar_bloc.d
 import 'package:al_quran_new/logic/settings_bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../logic/audio_player_bloc/audio_player_bloc.dart';
@@ -47,10 +49,28 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final Color bgColor  = Theme.of(context).scaffoldBackgroundColor;
-    final Color selectedColor  =  AppVariables.companyColor.withOpacity(.35);
+    final Color bgColor = Theme.of(context).scaffoldBackgroundColor;
+    final Color selectedColor = AppVariables.companyColor.withOpacity(.35);
     const double iconSize = 29;
     const double smallIconSize = 21;
+
+    const List<Map<String, dynamic>> repeatOptionsList = [
+      {
+        "icon": Icons.repeat_rounded,
+        "text": "OFF",
+        "loopType": LoopType.off,
+      },
+      {
+        "icon": Icons.repeat_one_rounded,
+        "text": "ONE",
+        "loopType": LoopType.one,
+      },
+      {
+        "icon": Icons.repeat_on,
+        "text": "ALL",
+        "loopType": LoopType.all,
+      }
+    ];
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
@@ -307,30 +327,98 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                       if (selectedAudioSubSettings ==
                                           AudioSettingsOptions.repeat)
                                         Expanded(
-                                          child: Column(
-                                            children: [
-                                              // const Text('Reciters'),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  IconButton(
-                                                    icon: const Icon(
-                                                        Icons.repeat_rounded),
-                                                    onPressed: () {},
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 1.w,
+                                              vertical: 2.h,
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                // const Text('Reciters'),
+                                                Wrap(
+                                                  spacing: 2.w,
+                                                  children: List.generate(
+                                                    repeatOptionsList.length,
+                                                    (index) {
+                                                      bool isSelected =
+                                                          audioPlayerState
+                                                                  .loopType ==
+                                                              repeatOptionsList[
+                                                                      index]
+                                                                  ["loopType"];
+                                                      return Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                bottom: 1.h),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          boxShadow: isSelected
+                                                              ? [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                            0.1),
+                                                                    spreadRadius:
+                                                                        1,
+                                                                    blurRadius:
+                                                                        1,
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0,
+                                                                            3),
+                                                                    // changes position of shadow
+                                                                  ),
+                                                                ]
+                                                              : null,
+                                                          color: audioPlayerState
+                                                                      .loopType ==
+                                                                  repeatOptionsList[
+                                                                          index]
+                                                                      [
+                                                                      "loopType"]
+                                                              ? AppVariables
+                                                                  .companyColorGold
+                                                                  .withOpacity(
+                                                                      .7)
+                                                              : bgColor,
+                                                        ),
+                                                        child: Column(
+                                                          children: [
+                                                            IconButton(
+                                                              icon: Icon(
+                                                                repeatOptionsList[
+                                                                        index]
+                                                                    ["icon"],
+                                                              ),
+                                                              onPressed: () {
+                                                                context
+                                                                    .read<
+                                                                        AudioPlayerBloc>()
+                                                                    .add(LoopAudioEvent(
+                                                                        loopType:
+                                                                            repeatOptionsList[index]["loopType"]));
+                                                              },
+                                                            ),
+                                                            Text(
+                                                              repeatOptionsList[
+                                                                      index]
+                                                                  ["text"],
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
                                                   ),
-                                                  IconButton(
-                                                    icon: const Icon(Icons
-                                                        .repeat_one_rounded),
-                                                    onPressed: () {},
-                                                  ),
-                                                ],
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-
 
                                       if (selectedAudioSubSettings ==
                                           AudioSettingsOptions.reciter)
@@ -393,7 +481,7 @@ class _AudioBottomBarWidgetState extends State<AudioBottomBarWidget> {
                                                                     index]["id"]
                                                                 .toString()
                                                         ? selectedColor
-                                                        :bgColor ,
+                                                        : bgColor,
 
                                                     leading: CircleAvatar(
                                                       radius: 20,

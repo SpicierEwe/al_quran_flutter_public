@@ -45,6 +45,7 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
       // Initial state for download
       emit(state.copyWith(
         message: "Download Starting now...",
+
         isErrorInTranslationDownload: false,
         isErrorInTranslationIdsDownload: false,
         isAllDataDownloaded: false,
@@ -54,6 +55,7 @@ class DownloaderBloc extends HydratedBloc<DownloaderEvent, DownloaderState> {
             event.isOnlyLanguageChange ? state.isQuranDownloaded : false,
         areTranslationIdsDownloaded: false,
         isTranslationDownloaded: false,
+
         progressPercentage: "0",
         isSurahNamesMetaDataDownloaded: false,
 

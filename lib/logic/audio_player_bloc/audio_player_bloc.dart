@@ -299,6 +299,30 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
 
       await resetValues(emit: emit);
     });
+
+    on<LoopAudioEvent>((event, emit) async {
+      switch (event.loopType) {
+        case LoopType.off:
+          audioPlayer.setLoopMode(LoopMode.off);
+          emit(state.copyWith(
+            loopType: LoopType.off,
+          ));
+          break;
+        case LoopType.one:
+          audioPlayer.setLoopMode(LoopMode.one);
+          emit(state.copyWith(
+            loopType: LoopType.one,
+          ));
+
+          break;
+        case LoopType.all:
+          audioPlayer.setLoopMode(LoopMode.all);
+          emit(state.copyWith(
+            loopType: LoopType.all,
+          ));
+          break;
+      }
+    });
   }
 
   // ========== SUPPORTING AUDIO FUNCTIONS ==========
