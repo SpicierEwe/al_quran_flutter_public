@@ -29,27 +29,13 @@ class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
   * */
 
   ThemeData themeDataManager({required ThemeType selectedThemeType}) {
-    // switch (themeType) {
-    //   case ThemeType.light:
-    //     return CustomThemes.light;
-    //
-    //   case ThemeType.pitchBlack:
-    //     return CustomThemes.pitchBlack;
-    //
-    //   case ThemeType.dark:
-    //     return CustomThemes.dark;
-    //
-    //   case ThemeType.sepia:
-    //     return CustomThemes.sepia;
-    // }
-
     for (var element in CustomThemes.themesData) {
-      String themeName = element["name"];
       ThemeType themeType = element["themeType"];
 
       if (themeType == selectedThemeType) {
         return ThemeData(
           colorScheme: ColorScheme.fromSeed(
+            // seed color should be the company color for all the themes
             seedColor: AppVariables.companyColor,
             brightness: element["brightness"],
             background: element["background"],

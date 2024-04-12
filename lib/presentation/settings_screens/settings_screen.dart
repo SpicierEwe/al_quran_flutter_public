@@ -6,6 +6,7 @@ import 'package:al_quran_new/logic/surah_display_bloc/surah_display_bloc.dart';
 import 'package:al_quran_new/logic/surah_display_bloc/surah_display_bloc.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/arabic_settings_section_widget.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/data_update_settings_widget.dart';
+import 'package:al_quran_new/presentation/settings_screens/widgets/developer_section.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/theme_settings.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/translation_settings_section_widget.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/transliteration_settings_section_widget.dart';
@@ -115,7 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     )),
 
                                 // ===============================
-                                // section theme
+                                // section refetch entire Data
                                 // ===============================
 
                                 SectionStyling(
@@ -124,6 +125,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     sectionName: "Refresh Data",
                                     needContentPadding: false,
                                     child: const DataUpdateSettingsWidget()),
+
+                                // ===============================
+                                // Section Developer
+                                // ===============================
+
+                                SectionStyling(
+                                    needBorder: true,
+                                    themeState: themeState,
+                                    sectionName:
+                                        "The Developer  ( Keep me in your duas )",
+                                    needContentPadding: false,
+                                    child: const DeveloperSection()),
                               ],
                             ),
                           )
