@@ -537,6 +537,7 @@ class Utils {
   // }
 
 // Display the text word in the selected Quran script ======================
+
   static Widget displayWordText(
       {required int verseIndex,
       required int wordIndex,

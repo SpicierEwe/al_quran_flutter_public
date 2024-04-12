@@ -44,6 +44,8 @@ void main() async {
         : await getApplicationDocumentsDirectory(),
   );
 
+  // HydratedBloc.storage.clear();
+
 // Get the application documents directory
   var path = await getApplicationDocumentsDirectory();
 
@@ -52,6 +54,7 @@ void main() async {
 
   // Open the Hive box
   await Hive.openBox('myBox');
+
   runApp(DevicePreview(
       isToolbarVisible: true,
       enabled: !kReleaseMode,

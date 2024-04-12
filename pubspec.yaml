@@ -129,7 +129,8 @@ flutter:
     # Uthmani Font
     - family: uthmani_font
       fonts:
-        - asset: assets/fonts/quran_fonts/UthmanicHafs_V20.ttf
+        #        - asset: assets/fonts/quran_fonts/UthmanicHafs_V20.ttf
+        - asset: assets/fonts/quran_fonts/UthmanicHafs_V22.ttf
           style: italic
 
 

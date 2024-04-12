@@ -23,8 +23,10 @@ class AppVariables {
   static const Color companyColor = Color(0xff223C63);
   static const Color companyColorGold = Color(0xffaaa375);
 
+  static const Color brandColor = Color(0xff223C63);
+
   final Logger logger = Logger();
- 
+
   /*
    make sure to keep the quran fonts name same as the values here
    the names must match the font files name but names here are not case sensitive.
@@ -42,8 +44,6 @@ class AppVariables {
 
   static const int quranMaxFontSizeLimit = 30;
   static const int quranMinFontSizeLimit = 1;
-
-  static const Color brandColor = Color(0xff223C63);
 
   static const int translationMaxFontSizeLimit = 20;
   static const int translationMinFontSizeLimit = 1;

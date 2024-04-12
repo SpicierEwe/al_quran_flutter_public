@@ -51,10 +51,10 @@ class _SurahNamesWidgetState extends State<SurahNamesWidget> {
       builder: (context, audioPlayerState) {
         return BlocBuilder<DownloaderBloc, DownloaderState>(
           builder: (context, downloaderBlocState) {
-            List surahNamesMetaData = downloaderBlocState.surahNamesMetaData!;
             if (downloaderBlocState.surahNamesMetaData == null) {
               return const LoadingWidget();
             }
+            List surahNamesMetaData = downloaderBlocState.surahNamesMetaData!;
             searchAbleSurahIds =
                 surahNamesMetaData.map((e) => e["id"] as int).toList();
 
