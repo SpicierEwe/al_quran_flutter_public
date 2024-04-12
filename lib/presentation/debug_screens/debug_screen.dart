@@ -12,14 +12,14 @@ import 'package:go_router/go_router.dart';
 import '../../logic/language_bloc/language_bloc.dart';
 import '../../logic/settings_bloc/settings_bloc.dart';
 
-class DeveloperScreen extends StatefulWidget {
-  const DeveloperScreen({super.key});
+class DebugScreen extends StatefulWidget {
+  const DebugScreen({super.key});
 
   @override
-  State<DeveloperScreen> createState() => _DeveloperScreenState();
+  State<DebugScreen> createState() => _DebugScreenState();
 }
 
-class _DeveloperScreenState extends State<DeveloperScreen> {
+class _DebugScreenState extends State<DebugScreen> {
   @override
   Widget build(BuildContext context) {
     List<String> tabs = [
@@ -35,7 +35,7 @@ class _DeveloperScreenState extends State<DeveloperScreen> {
       length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Developer Screen"),
+          title: Text("Debug Screen"),
           actions: [
             IconButton(
               onPressed: () {

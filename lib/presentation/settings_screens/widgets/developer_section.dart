@@ -1,4 +1,5 @@
 import 'package:al_quran_new/core/constants/variables.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
@@ -12,6 +13,17 @@ class DeveloperSection extends StatefulWidget {
 }
 
 class _DeveloperSectionState extends State<DeveloperSection> {
+  bool isDebugOptionsUnlocked = false;
+  int numberOfTaps = 0;
+
+  void unlockDeveloperOption() {
+    if (numberOfTaps == 5) {
+      setState(() {
+        isDebugOptionsUnlocked = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // ===============================
@@ -49,27 +61,42 @@ class _DeveloperSectionState extends State<DeveloperSection> {
 
           launchUrl(emailLaunchUri);
         },
-      } , {
+      },
+      {
         "title": "Privacy Policy",
         "subtitle": "Quickly reach us through an email.",
         "icon": Icons.email,
         "onTap": () async {
           context.push("/privacy_policy_screen");
         },
-      }
+      },
+      {
+        "title": "Debug Options",
+        "subtitle": "Allows you to debug the app.",
+        "icon": Icons.bug_report,
+        "onTap": () async {
+          context.push("/debug_screen");
+        },
+      },
     ];
 
     return Column(
       children: [
         Column(
-          children: options
-              .map((option) => ListTile(
-                    title: Text(option["title"]),
-                    subtitle: Text(option["subtitle"]),
-                    leading: Icon(option["icon"]),
-                    onTap: option["onTap"],
-                  ))
-              .toList(),
+          children: options.map((option) {
+
+            // If the debug options are not unlocked, then don't show the debug options
+            if (option["title"] == "Debug Options" && !isDebugOptionsUnlocked) {
+              return Container();
+            } else {
+              return ListTile(
+                title: Text(option["title"]),
+                subtitle: Text(option["subtitle"]),
+                leading: Icon(option["icon"]),
+                onTap: option["onTap"],
+              );
+            }
+          }).toList(),
         ),
         SizedBox(height: 3.h),
         Column(
@@ -90,14 +117,24 @@ class _DeveloperSectionState extends State<DeveloperSection> {
               ],
             ),
             SizedBox(height: 1.h),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("App version: "),
-                Text(
-                  AppVariables.appVersion,
-                ),
-              ],
+
+            // App version
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  numberOfTaps++;
+                  unlockDeveloperOption();
+                });
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("App version: "),
+                  Text(
+                    AppVariables.appVersion,
+                  ),
+                ],
+              ),
             ),
           ],
         )

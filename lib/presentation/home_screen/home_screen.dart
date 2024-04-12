@@ -91,12 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       title: const Text(AppStrings.appName),
       actions: [
-        IconButton(
-          onPressed: () {
-            context.push('/developer_screen');
-          },
-          icon: const Icon(Icons.developer_mode),
-        ),
+
         // Go To last read
         IconButton(
           enableFeedback: true,

@@ -14,11 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:sizer/sizer.dart';
 
-import 'package:cupertino_icons/cupertino_icons.dart';
-
-import '../../../../core/constants/enums.dart';
-import '../../../../core/utils/salah_tImes_utils.dart';
-import '../../../../logic/surah_display_bloc/surah_display_bloc.dart';
 
 class SalahTimesDisplayWidget extends StatefulWidget {
   const SalahTimesDisplayWidget({super.key});

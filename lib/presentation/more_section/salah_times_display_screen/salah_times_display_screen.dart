@@ -153,14 +153,17 @@ class _SalahTimesDisplayScreenState extends State<SalahTimesDisplayScreen> {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.25),
-                            blurRadius: 5,
-                            spreadRadius: 1,
-                          ),
-                        ],
+                        // color: Theme.of(context).primaryColor,
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.grey.withOpacity(0.25),
+                        //     blurRadius: 5,
+                        //     spreadRadius: 1,
+                        //   ),
+                        // ],
                       ),
                       child: const Row(
                         children: [

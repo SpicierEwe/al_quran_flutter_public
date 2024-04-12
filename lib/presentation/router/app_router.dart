@@ -1,4 +1,4 @@
-import 'package:al_quran_new/presentation/developer_screens/developer_screen.dart';
+
 import 'package:al_quran_new/presentation/favourites_screen/favourites_screen.dart';
 import 'package:al_quran_new/presentation/home_screen/home_screen.dart';
 import 'package:al_quran_new/presentation/intital_screens/choose_language.dart';
@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../logic/config_bloc/config_bloc.dart';
+import '../debug_screens/debug_screen.dart';
 import '../widgets/ayah_on_click_menu/widgets/verse_tafsir_display_screen.dart';
 
 class AppRouter {
@@ -86,9 +87,9 @@ class AppRouter {
               builder: (BuildContext context, GoRouterState state) =>
                   const JuzDisplayScreen()),
           GoRoute(
-              path: "developer_screen",
+              path: "debug_screen",
               builder: (BuildContext context, GoRouterState state) =>
-                  const DeveloperScreen()),
+                  const DebugScreen()),
           GoRoute(
               path: "favourites_screen",
               builder: (BuildContext context, GoRouterState state) =>
