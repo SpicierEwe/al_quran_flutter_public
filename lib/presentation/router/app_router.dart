@@ -10,6 +10,7 @@ import 'package:al_quran_new/presentation/more_section/rasool_allah^_names_displ
 import 'package:al_quran_new/presentation/more_section/salah_times_display_screen/salah_times_display_screen.dart';
 import 'package:al_quran_new/presentation/settings_screens/settings_screen.dart';
 import 'package:al_quran_new/presentation/settings_screens/widgets/change_reciter_settings_sub_screen.dart';
+import 'package:al_quran_new/presentation/settings_screens/widgets/privacy_policy_display_screen.dart';
 import 'package:al_quran_new/presentation/surah_display_screen/surah_display_screen.dart';
 import 'package:al_quran_new/presentation/surah_display_screen/surah_info_displayscreen/surah_info_display_screen.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,11 @@ class AppRouter {
               path: "rabbana_duas_display_screen",
               builder: (BuildContext context, GoRouterState state) =>
                   const RabbanaDuasDisplayScreen()),
+
+          GoRoute(
+              path: "privacy_policy_screen",
+              builder: (BuildContext context, GoRouterState state) =>
+                  const PrivacyPolicyScreen()),
         ],
       ),
     ],

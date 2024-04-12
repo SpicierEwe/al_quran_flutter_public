@@ -11,6 +11,7 @@ import 'package:al_quran_new/logic/surah_names_bloc/surah_names_bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
@@ -803,5 +804,19 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     );
     currentAudioIndexStream.cancel();
     audioPositionSubscription.cancel();
+
+
+  //   asking for review
+  askReview();
+  }
+
+
+
+  // ========== ASK FOR REVIEW ==========
+  void askReview() async {
+    final InAppReview inAppReview = InAppReview.instance;
+    if (await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }
   }
 }

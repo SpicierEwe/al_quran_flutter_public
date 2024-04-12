@@ -1,4 +1,6 @@
+import 'package:al_quran_new/core/constants/variables.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,6 +49,13 @@ class _DeveloperSectionState extends State<DeveloperSection> {
 
           launchUrl(emailLaunchUri);
         },
+      } , {
+        "title": "Privacy Policy",
+        "subtitle": "Quickly reach us through an email.",
+        "icon": Icons.email,
+        "onTap": () async {
+          context.push("/privacy_policy_screen");
+        },
       }
     ];
 
@@ -81,12 +90,12 @@ class _DeveloperSectionState extends State<DeveloperSection> {
               ],
             ),
             SizedBox(height: 1.h),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("App version: "),
-                const Text(
-                  "1.0.0",
+                Text("App version: "),
+                Text(
+                  AppVariables.appVersion,
                 ),
               ],
             ),

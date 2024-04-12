@@ -10,6 +10,8 @@ class AppVariables {
   static double buttonTextMedium = 13.sp;
   static double buttonTextSmall = 9.sp;
 
+  static const String appVersion = "1.0.0";
+
   static const Map<String, dynamic> defaultSelectedLanguage = {
     "id": 38,
     "name": "English",

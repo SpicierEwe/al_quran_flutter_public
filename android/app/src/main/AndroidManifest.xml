@@ -7,9 +7,9 @@
 
     <application
         android:enableOnBackInvokedCallback="true"
-        android:label="al_quran_new"
+        android:label="al Qur'an"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <activity
             android:name=".MainActivity"
